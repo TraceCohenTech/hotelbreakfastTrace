@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 
 // Product data from Hotel Breakfast
@@ -13,7 +13,13 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg",
     tag: "Bestseller",
     category: "Apparel",
-    hoverColor: "hover-color-navy"
+    hoverColor: "hover-color-navy",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Navy", hex: "#334FB4" },
+      { name: "Cream", hex: "#FFF6E1" },
+      { name: "Burgundy", hex: "#A42325" }
+    ]
   },
   {
     id: 2,
@@ -23,7 +29,13 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1591691027165322782_2048.jpg",
     tag: "Essential",
     category: "Apparel",
-    hoverColor: "hover-color-coral"
+    hoverColor: "hover-color-coral",
+    sizes: ["XS", "S", "M", "L", "XL", "XXL"],
+    colors: [
+      { name: "White", hex: "#FFFFFF" },
+      { name: "Black", hex: "#1a1a1a" },
+      { name: "Sage", hex: "#7A9E7E" }
+    ]
   },
   {
     id: 3,
@@ -33,7 +45,12 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg",
     tag: "New Drop",
     category: "Apparel",
-    hoverColor: "hover-color-burgundy"
+    hoverColor: "hover-color-burgundy",
+    sizes: ["S", "M", "L", "XL", "XXL"],
+    colors: [
+      { name: "Black", hex: "#1a1a1a" },
+      { name: "White", hex: "#FFFFFF" }
+    ]
   },
   {
     id: 4,
@@ -43,7 +60,12 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/14932325304822957776_2048.jpg",
     tag: "Limited",
     category: "Apparel",
-    hoverColor: "hover-color-sage"
+    hoverColor: "hover-color-sage",
+    sizes: ["S", "M", "L", "XL"],
+    colors: [
+      { name: "Cream", hex: "#FFF6E1" },
+      { name: "Black", hex: "#1a1a1a" }
+    ]
   },
   {
     id: 5,
@@ -53,7 +75,12 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/13733165656261452820_2048.jpg",
     tag: "Sustainable",
     category: "Accessories",
-    hoverColor: "hover-color-sage"
+    hoverColor: "hover-color-sage",
+    sizes: ["One Size"],
+    colors: [
+      { name: "Natural", hex: "#F5E6C8" },
+      { name: "Black", hex: "#1a1a1a" }
+    ]
   },
   {
     id: 6,
@@ -63,7 +90,13 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1875496474666638470_2048.jpg",
     tag: "Organic",
     category: "Accessories",
-    hoverColor: "hover-color-navy"
+    hoverColor: "hover-color-navy",
+    sizes: ["One Size"],
+    colors: [
+      { name: "Navy", hex: "#334FB4" },
+      { name: "Black", hex: "#1a1a1a" },
+      { name: "Cream", hex: "#FFF6E1" }
+    ]
   },
   {
     id: 7,
@@ -73,7 +106,12 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5580959199368031222_2048.jpg",
     tag: "Fan Favorite",
     category: "Accessories",
-    hoverColor: "hover-color-coral"
+    hoverColor: "hover-color-coral",
+    sizes: ["One Size"],
+    colors: [
+      { name: "Denim Blue", hex: "#6B8CAE" },
+      { name: "Washed Black", hex: "#3a3a3a" }
+    ]
   },
   {
     id: 8,
@@ -83,7 +121,12 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3163221279104308777_2048.jpg",
     tag: "Summer",
     category: "Accessories",
-    hoverColor: "hover-color-burgundy"
+    hoverColor: "hover-color-burgundy",
+    sizes: ["S/M", "L/XL"],
+    colors: [
+      { name: "Natural", hex: "#F5E6C8" },
+      { name: "Black", hex: "#1a1a1a" }
+    ]
   },
   {
     id: 9,
@@ -93,7 +136,11 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5885969260573620490_2048.jpg",
     tag: "Hot",
     category: "Beach",
-    hoverColor: "hover-color-coral"
+    hoverColor: "hover-color-coral",
+    sizes: ["30×60"],
+    colors: [
+      { name: "Terracotta", hex: "#E07A5F" }
+    ]
   },
   {
     id: 10,
@@ -103,7 +150,11 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/14707760509720742550_2048.jpg",
     tag: "Vibrant",
     category: "Beach",
-    hoverColor: "hover-color-sage"
+    hoverColor: "hover-color-sage",
+    sizes: ["30×60"],
+    colors: [
+      { name: "Green", hex: "#7A9E7E" }
+    ]
   },
   {
     id: 11,
@@ -113,7 +164,11 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/665358233442400327_2048.jpg",
     tag: "Luxe",
     category: "Beach",
-    hoverColor: "hover-color-navy"
+    hoverColor: "hover-color-navy",
+    sizes: ["30×60"],
+    colors: [
+      { name: "Sunrise", hex: "#FFB347" }
+    ]
   },
   {
     id: 12,
@@ -123,8 +178,61 @@ const products = [
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg",
     tag: "Poolside",
     category: "Beach",
-    hoverColor: "hover-color-burgundy"
+    hoverColor: "hover-color-burgundy",
+    sizes: ["30×60"],
+    colors: [
+      { name: "Ocean Blue", hex: "#334FB4" }
+    ]
   },
+];
+
+// Lifestyle Bundles
+const bundles = [
+  {
+    id: 101,
+    name: "Poolside Essentials",
+    description: "Everything you need for the perfect pool day. Includes towel, hat, and tote.",
+    items: [products[8], products[5], products[4]], // Terracotta Towel, Organic Cap, Everyday Tote
+    originalPrice: 126,
+    bundlePrice: 107,
+    discount: 15,
+    image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5885969260573620490_2048.jpg",
+    tag: "SAVE 15%"
+  },
+  {
+    id: 102,
+    name: "Champagne Brunch Kit",
+    description: "The complete morning look. Crewneck, cap, and tote for effortless weekend style.",
+    items: [products[0], products[6], products[4]], // Crewneck, Denim Dad Hat, Tote
+    originalPrice: 170,
+    bundlePrice: 145,
+    discount: 15,
+    image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg",
+    tag: "BESTSELLER"
+  },
+  {
+    id: 103,
+    name: "Beach Bum Bundle",
+    description: "Two premium towels and a sun hat. Ready for any beach adventure.",
+    items: [products[8], products[10], products[7]], // Terracotta Towel, Sun Towel, Sun Hat
+    originalPrice: 133,
+    bundlePrice: 113,
+    discount: 15,
+    image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/665358233442400327_2048.jpg",
+    tag: "SUMMER FAVE"
+  }
+];
+
+// Recently purchased notifications data
+const recentPurchases = [
+  { name: "Sarah", location: "Los Angeles, CA", product: "The Crewneck Pullover", time: "2 min ago" },
+  { name: "Marcus", location: "Miami, FL", product: "Terracotta Towel", time: "5 min ago" },
+  { name: "Emma", location: "Brooklyn, NY", product: "The Everyday Tote", time: "8 min ago" },
+  { name: "Jake", location: "Austin, TX", product: "Do Not Disturb Tee", time: "12 min ago" },
+  { name: "Olivia", location: "San Francisco, CA", product: "The Organic Cap", time: "15 min ago" },
+  { name: "Liam", location: "Chicago, IL", product: "Beach Bum Bundle", time: "18 min ago" },
+  { name: "Sophia", location: "Seattle, WA", product: "The Denim Dad Hat", time: "22 min ago" },
+  { name: "Noah", location: "Denver, CO", product: "Poolside Essentials", time: "25 min ago" },
 ];
 
 const featuredProducts = products.slice(0, 4);
@@ -173,6 +281,27 @@ const pressLogos = [
   { name: "Complex", display: "COMPLEX" },
 ];
 
+// Type definitions
+interface Product {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  tag: string;
+  category: string;
+  hoverColor: string;
+  sizes: string[];
+  colors: { name: string; hex: string }[];
+}
+
+interface CartItem {
+  product: Product;
+  size: string;
+  color: string;
+  quantity: number;
+}
+
 export default function Home() {
   const [email, setEmail] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -180,7 +309,103 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [visibleProducts, setVisibleProducts] = useState<Set<number>>(new Set());
   const heroRef = useRef<HTMLDivElement>(null);
+  const productRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+
+  // Quick View Modal state
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('');
+
+  // Sticky Add to Cart state
+  const [stickyProduct, setStickyProduct] = useState<Product | null>(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  // Recent purchase notifications
+  const [notification, setNotification] = useState<typeof recentPurchases[0] | null>(null);
+  const [notificationVisible, setNotificationVisible] = useState(false);
+
+  // Video loaded state
+  const [videoLoaded, setVideoLoaded] = useState(false);
+
+  // Intersection Observer for scroll animations
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const productId = Number(entry.target.getAttribute('data-product-id'));
+          if (entry.isIntersecting) {
+            setVisibleProducts(prev => new Set([...prev, productId]));
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '50px' }
+    );
+
+    productRefs.current.forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, [activeCategory]);
+
+  // Sticky bar scroll detection
+  useEffect(() => {
+    const handleScroll = () => {
+      const shopSection = document.getElementById('shop');
+      if (shopSection) {
+        const rect = shopSection.getBoundingClientRect();
+        // Show sticky bar when scrolled past the shop section header
+        if (rect.top < -200 && rect.bottom > 100) {
+          setShowStickyBar(true);
+          // Set to first visible product or first filtered product
+          if (!stickyProduct) {
+            const filtered = activeCategory === 'All'
+              ? products
+              : products.filter(p => p.category === activeCategory);
+            setStickyProduct(filtered[0]);
+          }
+        } else {
+          setShowStickyBar(false);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [activeCategory, stickyProduct]);
+
+  // Recent purchase notifications
+  useEffect(() => {
+    let purchaseIndex = 0;
+
+    const showNotification = () => {
+      setNotification(recentPurchases[purchaseIndex]);
+      setNotificationVisible(true);
+
+      // Hide after 4 seconds
+      setTimeout(() => {
+        setNotificationVisible(false);
+      }, 4000);
+
+      purchaseIndex = (purchaseIndex + 1) % recentPurchases.length;
+    };
+
+    // Show first notification after 5 seconds
+    const initialTimeout = setTimeout(showNotification, 5000);
+
+    // Then show every 15-25 seconds randomly
+    const interval = setInterval(() => {
+      const randomDelay = Math.random() * 10000 + 15000;
+      setTimeout(showNotification, randomDelay);
+    }, 25000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     setIsVisible(true);
@@ -197,9 +422,31 @@ export default function Home() {
     ? products
     : products.filter(p => p.category === activeCategory);
 
-  const addToCart = () => {
+  const addToCart = useCallback((product?: Product, size?: string, color?: string) => {
     setCartCount(prev => prev + 1);
+    // Close quick view if open
+    if (quickViewProduct) {
+      setQuickViewProduct(null);
+    }
+  }, [quickViewProduct]);
+
+  const openQuickView = (product: Product) => {
+    setQuickViewProduct(product);
+    setSelectedSize(product.sizes[0]);
+    setSelectedColor(product.colors[0]?.name || '');
   };
+
+  const closeQuickView = () => {
+    setQuickViewProduct(null);
+    setSelectedSize('');
+    setSelectedColor('');
+  };
+
+  const setProductRef = useCallback((id: number, el: HTMLDivElement | null) => {
+    if (el) {
+      productRefs.current.set(id, el);
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#FFF6E1] grain-overlay">
@@ -212,6 +459,227 @@ export default function Home() {
           transform: 'scale(1)'
         }}
       />
+
+      {/* Recent Purchase Notification Toast */}
+      <div
+        className={`fixed bottom-24 left-4 z-[90] transition-all duration-500 ${
+          notificationVisible
+            ? 'translate-x-0 opacity-100'
+            : '-translate-x-full opacity-0'
+        }`}
+      >
+        {notification && (
+          <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-xs border-2 border-[#7A9E7E]/20 animate-bounce-in">
+            <div className="flex items-start gap-3">
+              <div className="w-12 h-12 rounded-xl bg-[#7A9E7E]/10 flex items-center justify-center flex-shrink-0">
+                <span className="text-2xl">🛒</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-bold text-[#1a1a1a]">
+                  {notification.name} from {notification.location}
+                </p>
+                <p className="text-xs text-[#1a1a1a]/60 mt-0.5">
+                  just purchased <span className="font-semibold text-[#334FB4]">{notification.product}</span>
+                </p>
+                <p className="text-[10px] text-[#1a1a1a]/40 mt-1">{notification.time}</p>
+              </div>
+              <button
+                onClick={() => setNotificationVisible(false)}
+                className="text-[#1a1a1a]/30 hover:text-[#1a1a1a] transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="mt-3 flex items-center gap-2">
+              <div className="flex-1 h-1 bg-[#7A9E7E]/20 rounded-full overflow-hidden">
+                <div className="h-full bg-[#7A9E7E] rounded-full animate-[shrink_4s_linear_forwards]" />
+              </div>
+              <span className="text-[10px] text-[#7A9E7E] font-bold">✓ Verified</span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Sticky Add to Cart Bar */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-[80] transition-all duration-300 ${
+          showStickyBar ? 'translate-y-0' : 'translate-y-full'
+        }`}
+      >
+        <div className="bg-white/95 backdrop-blur-lg border-t border-black/10 shadow-2xl">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+            {stickyProduct && (
+              <>
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
+                    <Image
+                      src={stickyProduct.image}
+                      alt={stickyProduct.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-bold text-[#1a1a1a] truncate">{stickyProduct.name}</p>
+                    <p className="text-[#334FB4] font-black">${stickyProduct.price}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => openQuickView(stickyProduct)}
+                    className="hidden sm:flex px-4 py-2 text-sm font-semibold text-[#334FB4] hover:bg-[#334FB4]/10 rounded-full transition-colors"
+                  >
+                    Quick View
+                  </button>
+                  <button
+                    onClick={() => addToCart(stickyProduct)}
+                    className="px-6 py-3 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    <span className="hidden sm:inline">Add to Cart</span>
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Quick View Modal */}
+      {quickViewProduct && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+          onClick={closeQuickView}
+        >
+          {/* Backdrop */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" />
+
+          {/* Modal */}
+          <div
+            className="relative bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-scale-in"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              onClick={closeQuickView}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-[#A42325] hover:text-white transition-all"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="grid md:grid-cols-2">
+              {/* Image Section */}
+              <div className="relative aspect-square md:aspect-auto bg-gradient-to-br from-[#f8f8f8] to-[#f0f0f0]">
+                <Image
+                  src={quickViewProduct.image}
+                  alt={quickViewProduct.name}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className={`px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg ${
+                    quickViewProduct.tag === 'New Drop' || quickViewProduct.tag === 'Limited' ? 'bg-gradient-to-r from-[#A42325] to-[#E85D4C]' :
+                    quickViewProduct.tag === 'Sustainable' || quickViewProduct.tag === 'Organic' ? 'bg-gradient-to-r from-[#5A7E5E] to-[#7A9E7E]' :
+                    'bg-gradient-to-r from-[#334FB4] to-[#4A6BD4]'
+                  }`}>
+                    {quickViewProduct.tag}
+                  </span>
+                </div>
+              </div>
+
+              {/* Details Section */}
+              <div className="p-6 md:p-8 flex flex-col">
+                <p className="text-xs text-[#334FB4] font-bold uppercase tracking-wider mb-2">
+                  {quickViewProduct.category}
+                </p>
+                <h2 className="text-2xl md:text-3xl font-black text-[#1a1a1a] mb-2">
+                  {quickViewProduct.name}
+                </h2>
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-2xl font-black text-[#1a1a1a]">${quickViewProduct.price}</span>
+                  <div className="flex items-center gap-1 text-[#E85D4C]">
+                    <span className="text-sm">★★★★★</span>
+                    <span className="text-xs text-[#1a1a1a]/50">(124 reviews)</span>
+                  </div>
+                </div>
+                <p className="text-[#1a1a1a]/60 mb-6 leading-relaxed">
+                  {quickViewProduct.description}
+                </p>
+
+                {/* Color Selection */}
+                {quickViewProduct.colors.length > 0 && (
+                  <div className="mb-6">
+                    <p className="text-sm font-bold text-[#1a1a1a] mb-3">
+                      Color: <span className="font-normal text-[#1a1a1a]/60">{selectedColor}</span>
+                    </p>
+                    <div className="flex gap-3">
+                      {quickViewProduct.colors.map((color) => (
+                        <button
+                          key={color.name}
+                          onClick={() => setSelectedColor(color.name)}
+                          className={`w-10 h-10 rounded-full border-2 transition-all hover:scale-110 ${
+                            selectedColor === color.name
+                              ? 'border-[#334FB4] ring-2 ring-[#334FB4]/30 scale-110'
+                              : 'border-gray-200'
+                          }`}
+                          style={{ backgroundColor: color.hex }}
+                          title={color.name}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Size Selection */}
+                <div className="mb-6">
+                  <p className="text-sm font-bold text-[#1a1a1a] mb-3">
+                    Size: <span className="font-normal text-[#1a1a1a]/60">{selectedSize}</span>
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {quickViewProduct.sizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                          selectedSize === size
+                            ? 'bg-[#334FB4] text-white'
+                            : 'bg-[#FFF6E1] text-[#1a1a1a] hover:bg-[#334FB4]/10'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Add to Cart Button */}
+                <button
+                  onClick={() => addToCart(quickViewProduct, selectedSize, selectedColor)}
+                  className="mt-auto w-full py-4 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-3"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                  Add to Cart — ${quickViewProduct.price}
+                </button>
+
+                {/* Trust badges */}
+                <div className="flex items-center justify-center gap-6 mt-6 text-xs text-[#1a1a1a]/50">
+                  <span className="flex items-center gap-1">🚚 Free Shipping</span>
+                  <span className="flex items-center gap-1">↩️ Easy Returns</span>
+                  <span className="flex items-center gap-1">✓ In Stock</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Announcement Bar */}
       <div className="bg-gradient-to-r from-[#334FB4] via-[#4A6BD4] to-[#334FB4] text-white text-center py-3 px-4 text-sm font-medium animate-gradient bg-[length:200%_100%] relative overflow-hidden">
@@ -247,7 +715,7 @@ export default function Home() {
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center gap-8">
-              {['Shop All', 'Bestsellers', 'Our Story', 'Reviews'].map((item, i) => (
+              {['Shop All', 'Bundles', 'Bestsellers', 'Our Story'].map((item, i) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase().replace(' ', '')}`}
@@ -295,7 +763,7 @@ export default function Home() {
           {isMenuOpen && (
             <div className="lg:hidden mt-4 pb-4 border-t border-black/10 pt-4 animate-slide-up">
               <div className="flex flex-col gap-4">
-                {['Shop All', 'Bestsellers', 'Our Story', 'Reviews'].map((item, i) => (
+                {['Shop All', 'Bundles', 'Bestsellers', 'Our Story'].map((item, i) => (
                   <a
                     key={item}
                     href={`#${item.toLowerCase().replace(' ', '')}`}
@@ -311,21 +779,29 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
+      {/* Hero Section with Video Background */}
       <section ref={heroRef} className="relative overflow-hidden min-h-[90vh] flex items-center">
-        {/* Animated background blobs */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#334FB4] blob-bg animate-blob" />
-        <div className="absolute top-40 right-20 w-96 h-96 bg-[#E85D4C] blob-bg animate-blob stagger-2" />
-        <div className="absolute bottom-20 left-1/3 w-80 h-80 bg-[#7A9E7E] blob-bg animate-blob stagger-4" />
-        <div className="absolute bottom-40 right-1/4 w-64 h-64 bg-[#A42325] blob-bg animate-morph stagger-3" />
-
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#334FB4] via-[#4A6BD4] to-[#334FB4] animate-gradient bg-[length:200%_200%]" />
-
-        {/* Pattern overlay */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48Y2lyY2xlIGN4PSIzMCIgY3k9IjMwIiByPSIyIi8+PC9nPjwvZz48L3N2Zz4=')]" />
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            onLoadedData={() => setVideoLoaded(true)}
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+            poster="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920"
+          >
+            <source src="https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+          </video>
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-r from-[#334FB4]/90 via-[#334FB4]/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#FFF6E1] via-transparent to-transparent" />
         </div>
+
+        {/* Animated background blobs (fallback/accent) */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-[#334FB4] blob-bg animate-blob opacity-30" />
+        <div className="absolute bottom-40 right-1/4 w-64 h-64 bg-[#A42325] blob-bg animate-morph stagger-3 opacity-20" />
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 lg:py-32 w-full">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -358,8 +834,8 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
-                <a href="#about" className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-[#334FB4] transition-all flex items-center justify-center hover-glow">
-                  Our Story
+                <a href="#bundles" className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-[#334FB4] transition-all flex items-center justify-center hover-glow">
+                  Shop Bundles
                 </a>
               </div>
 
@@ -384,7 +860,10 @@ export default function Home() {
             <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-4">
-                  <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float cursor-pointer">
+                  <div
+                    className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float cursor-pointer"
+                    onClick={() => openQuickView(products[0])}
+                  >
                     <Image
                       src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg"
                       alt="The Crewneck Pullover"
@@ -394,10 +873,13 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                     <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur px-4 py-2 rounded-full text-sm font-bold text-[#334FB4] transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                      $76 — Shop Now
+                      Quick View
                     </div>
                   </div>
-                  <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float-reverse cursor-pointer">
+                  <div
+                    className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float-reverse cursor-pointer"
+                    onClick={() => openQuickView(products[5])}
+                  >
                     <Image
                       src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1875496474666638470_2048.jpg"
                       alt="The Organic Cap"
@@ -409,7 +891,10 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="space-y-4 pt-8">
-                  <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float stagger-2 cursor-pointer">
+                  <div
+                    className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float stagger-2 cursor-pointer"
+                    onClick={() => openQuickView(products[8])}
+                  >
                     <Image
                       src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5885969260573620490_2048.jpg"
                       alt="Terracotta Towel"
@@ -419,7 +904,10 @@ export default function Home() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
-                  <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float-reverse stagger-3 cursor-pointer">
+                  <div
+                    className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float-reverse stagger-3 cursor-pointer"
+                    onClick={() => openQuickView(products[2])}
+                  >
                     <Image
                       src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg"
                       alt="Do Not Disturb Tee"
@@ -485,6 +973,99 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Shop the Look - Bundles Section */}
+      <section id="bundles" className="py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-br from-[#FFF6E1] to-white">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-14">
+            <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#7A9E7E] to-[#5A7E5E] text-white text-xs font-bold rounded-full mb-4 tracking-wide animate-pulse-scale">
+              🎁 SAVE 15%
+            </span>
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-6">
+              Shop the <span className="gradient-text">Look</span>
+            </h2>
+            <p className="text-[#1a1a1a]/60 max-w-2xl mx-auto text-lg">
+              Curated bundles designed to go together. Save 15% when you shop the complete look.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {bundles.map((bundle, index) => (
+              <div
+                key={bundle.id}
+                className="group bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-2 border-transparent hover:border-[#7A9E7E] animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.15}s` }}
+              >
+                {/* Bundle Image */}
+                <div className="aspect-[4/3] relative overflow-hidden">
+                  <Image
+                    src={bundle.image}
+                    alt={bundle.name}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute top-4 left-4">
+                    <span className="px-4 py-1.5 bg-[#7A9E7E] text-white text-xs font-bold rounded-full shadow-lg">
+                      {bundle.tag}
+                    </span>
+                  </div>
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <h3 className="text-2xl font-black text-white mb-1">{bundle.name}</h3>
+                    <p className="text-white/80 text-sm">{bundle.items.length} items included</p>
+                  </div>
+                </div>
+
+                {/* Bundle Details */}
+                <div className="p-6">
+                  <p className="text-[#1a1a1a]/60 text-sm mb-4">{bundle.description}</p>
+
+                  {/* Included Items */}
+                  <div className="flex items-center gap-2 mb-4">
+                    {bundle.items.map((item, i) => (
+                      <div key={i} className="relative w-12 h-12 rounded-xl overflow-hidden border-2 border-white shadow-md -ml-2 first:ml-0">
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                    <span className="text-xs text-[#1a1a1a]/50 ml-2">
+                      {bundle.items.map(i => i.name.split(' ')[1]).join(' + ')}
+                    </span>
+                  </div>
+
+                  {/* Pricing */}
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl font-black text-[#7A9E7E]">${bundle.bundlePrice}</span>
+                      <span className="text-lg text-[#1a1a1a]/30 line-through">${bundle.originalPrice}</span>
+                    </div>
+                    <span className="text-xs font-bold text-[#7A9E7E] bg-[#7A9E7E]/10 px-3 py-1 rounded-full">
+                      Save ${bundle.originalPrice - bundle.bundlePrice}
+                    </span>
+                  </div>
+
+                  {/* Add to Cart */}
+                  <button
+                    onClick={() => {
+                      setCartCount(prev => prev + bundle.items.length);
+                    }}
+                    className="w-full py-3 bg-gradient-to-r from-[#7A9E7E] to-[#5A7E5E] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Add Bundle to Cart
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Bestsellers Section */}
       <section id="bestsellers" className="py-20 sm:py-28 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
@@ -509,8 +1090,15 @@ export default function Home() {
             {featuredProducts.map((product, index) => (
               <div
                 key={product.id}
-                className={`group product-card bg-white rounded-3xl overflow-hidden shadow-lg cursor-pointer border-2 border-transparent hover:border-[#334FB4] animate-fade-in-up`}
-                style={{ animationDelay: `${index * 0.15}s` }}
+                ref={(el) => setProductRef(product.id, el)}
+                data-product-id={product.id}
+                onClick={() => openQuickView(product)}
+                className={`group product-card bg-white rounded-3xl overflow-hidden shadow-lg cursor-pointer border-2 border-transparent hover:border-[#334FB4] transition-all duration-700 ${
+                  visibleProducts.has(product.id)
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-12'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
                 <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-[#f8f8f8] to-[#f0f0f0]">
                   <Image
@@ -530,7 +1118,7 @@ export default function Home() {
                     </span>
                   </div>
                   <button
-                    onClick={(e) => { e.stopPropagation(); addToCart(); }}
+                    onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                     className={`absolute bottom-4 right-4 w-14 h-14 ${product.hoverColor} bg-[#1a1a1a] text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 shadow-xl hover:scale-110`}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -622,8 +1210,18 @@ export default function Home() {
             {filteredProducts.map((product, index) => (
               <div
                 key={product.id}
-                className={`group product-card bg-[#FFF6E1] rounded-3xl overflow-hidden cursor-pointer border-2 border-transparent hover:border-[#334FB4] animate-scale-in`}
-                style={{ animationDelay: `${index * 0.05}s` }}
+                ref={(el) => setProductRef(product.id + 100, el)}
+                data-product-id={product.id + 100}
+                onClick={() => {
+                  openQuickView(product);
+                  setStickyProduct(product);
+                }}
+                className={`group product-card bg-[#FFF6E1] rounded-3xl overflow-hidden cursor-pointer border-2 border-transparent hover:border-[#334FB4] transition-all duration-700 ${
+                  visibleProducts.has(product.id + 100)
+                    ? 'opacity-100 translate-y-0 rotate-0'
+                    : 'opacity-0 translate-y-16 rotate-2'
+                }`}
+                style={{ transitionDelay: `${(index % 4) * 100}ms` }}
               >
                 <div className="aspect-square relative overflow-hidden">
                   <Image
@@ -642,8 +1240,14 @@ export default function Home() {
                       {product.tag}
                     </span>
                   </div>
+                  {/* Quick View overlay */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                    <span className="bg-white text-[#1a1a1a] px-6 py-3 rounded-full font-bold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-xl">
+                      Quick View
+                    </span>
+                  </div>
                   <button
-                    onClick={(e) => { e.stopPropagation(); addToCart(); }}
+                    onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                     className={`absolute bottom-4 right-4 w-12 h-12 sm:w-14 sm:h-14 ${product.hoverColor} bg-white text-[#1a1a1a] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 shadow-xl`}
                   >
                     <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -659,7 +1263,7 @@ export default function Home() {
                   <div className="flex items-center justify-between">
                     <span className="text-[#1a1a1a] font-black text-lg sm:text-xl">${product.price}</span>
                     <button
-                      onClick={(e) => { e.stopPropagation(); addToCart(); }}
+                      onClick={(e) => { e.stopPropagation(); addToCart(product); }}
                       className="text-xs sm:text-sm font-bold text-[#334FB4] hover:text-[#A42325] transition-colors"
                     >
                       Add to Cart →
@@ -811,6 +1415,7 @@ export default function Home() {
                 key={i}
                 className="aspect-square rounded-2xl sm:rounded-3xl overflow-hidden relative group cursor-pointer hover-scale animate-fade-in"
                 style={{ animationDelay: `${i * 0.1}s` }}
+                onClick={() => openQuickView(product)}
               >
                 <Image
                   src={product.image}
@@ -901,7 +1506,7 @@ export default function Home() {
               </div>
             </div>
             {[
-              { title: 'Shop', links: ['All Products', 'Apparel', 'Accessories', 'Beach', 'Gift Cards'] },
+              { title: 'Shop', links: ['All Products', 'Bundles', 'Apparel', 'Accessories', 'Beach'] },
               { title: 'Help', links: ['FAQ', 'Shipping', 'Returns', 'Contact Us', 'Size Guide'] },
               { title: 'Company', links: ['Our Story', 'Sustainability', 'Press', 'Careers', 'Privacy'] },
             ].map((col, i) => (

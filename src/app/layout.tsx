@@ -13,6 +13,7 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://hotel-breakfast-redesign.vercel.app"),
   title: "Hotel Breakfast | Because Champagne is a Morning Drink",
   description: "Elevate your morning ritual. Luxury lifestyle essentials for those who believe every morning should feel like vacation. Premium quality. Effortless style.",
   keywords: ["luxury breakfast", "champagne", "morning ritual", "lifestyle", "hotel breakfast", "beach towels", "premium apparel"],
@@ -25,14 +26,18 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Hotel Breakfast | Because Champagne is a Morning Drink",
-    description: "Lifestyle essentials for those who believe every morning should feel like vacation.",
+    description: "Lifestyle essentials for those who believe every morning should feel like vacation. Premium quality. Effortless style.",
     type: "website",
     siteName: "Hotel Breakfast",
+    locale: "en_US",
+    url: "https://hotel-breakfast-redesign.vercel.app",
   },
   twitter: {
     card: "summary_large_image",
     title: "Hotel Breakfast | Because Champagne is a Morning Drink",
     description: "Lifestyle essentials for those who believe every morning should feel like vacation.",
+    creator: "@hotelbreakfast",
+    site: "@hotelbreakfast",
   },
 };
 

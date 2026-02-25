@@ -14,12 +14,25 @@ const playfair = Playfair_Display({
 
 export const metadata: Metadata = {
   title: "Hotel Breakfast | Because Champagne is a Morning Drink",
-  description: "Elevate your morning ritual. Luxury breakfast lifestyle brand celebrating the art of starting your day with intention and indulgence.",
-  keywords: ["luxury breakfast", "champagne", "morning ritual", "lifestyle", "hotel breakfast"],
+  description: "Elevate your morning ritual. Luxury lifestyle essentials for those who believe every morning should feel like vacation. Premium quality. Effortless style.",
+  keywords: ["luxury breakfast", "champagne", "morning ritual", "lifestyle", "hotel breakfast", "beach towels", "premium apparel"],
+  icons: {
+    icon: [
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "Hotel Breakfast | Because Champagne is a Morning Drink",
-    description: "Elevate your morning ritual with luxury breakfast essentials.",
+    description: "Lifestyle essentials for those who believe every morning should feel like vacation.",
     type: "website",
+    siteName: "Hotel Breakfast",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hotel Breakfast | Because Champagne is a Morning Drink",
+    description: "Lifestyle essentials for those who believe every morning should feel like vacation.",
   },
 };
 
@@ -31,7 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${playfair.variable} antialiased bg-[#0a0a0a] text-white`}
+        className={`${inter.variable} ${playfair.variable} antialiased bg-[#FFF6E1] text-[#1a1a1a]`}
       >
         {children}
       </body>

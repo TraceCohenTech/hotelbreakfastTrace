@@ -1,18 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
-  --foreground: #ffffff;
-  --accent: #d4af37;
-  --accent-light: #f5e6b3;
+  --background: #FFF6E1;
+  --foreground: #1a1a1a;
+  --cream: #FFF6E1;
+  --cream-dark: #F5E6C8;
+  --navy: #334FB4;
+  --burgundy: #A42325;
+  --coral: #E85D4C;
+  --sage: #7A9E7E;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cream: var(--cream);
+  --color-navy: var(--navy);
+  --color-burgundy: var(--burgundy);
+  --font-sans: var(--font-inter);
 }
 
 body {
@@ -25,18 +30,18 @@ body {
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  50% { transform: translateY(-8px); }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -44,63 +49,84 @@ body {
   }
 }
 
-@keyframes pulse-gold {
-  0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
-  50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6); }
-}
-
 @keyframes marquee {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
 }
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
 
-.animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.3), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+.animate-bounce-gentle {
+  animation: bounce-gentle 2s ease-in-out infinite;
 }
 
 .animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.animate-pulse-gold {
-  animation: pulse-gold 2s ease-in-out infinite;
+  animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .animate-marquee {
-  animation: marquee 20s linear infinite;
+  animation: marquee 25s linear infinite;
 }
 
-.glass {
-  background: rgba(255, 255, 255, 0.05);
+.animate-wiggle {
+  animation: wiggle 1s ease-in-out infinite;
+}
+
+.card-cream {
+  background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
-.gold-gradient {
-  background: linear-gradient(135deg, #d4af37 0%, #f5e6b3 50%, #d4af37 100%);
+.card-white {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.navy-gradient {
+  background: linear-gradient(135deg, #334FB4 0%, #4A6BD4 100%);
+}
+
+.text-gradient-navy {
+  background: linear-gradient(135deg, #334FB4 0%, #4A6BD4 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.gold-border {
-  border: 1px solid rgba(212, 175, 55, 0.3);
+.text-gradient-coral {
+  background: linear-gradient(135deg, #E85D4C 0%, #F4847A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.hover-glow:hover {
-  box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-  transition: box-shadow 0.3s ease;
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(51, 79, 180, 0.15);
 }
 
 .gradient-mask {
   mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+}
+
+/* Fun selection color */
+::selection {
+  background: #334FB4;
+  color: white;
 }
 
 /* Scrollbar styling */
@@ -109,14 +135,14 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #FFF6E1;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.3);
+  background: #334FB4;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.5);
+  background: #4A6BD4;
 }

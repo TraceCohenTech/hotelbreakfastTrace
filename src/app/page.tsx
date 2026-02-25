@@ -15,8 +15,8 @@ const ChampagneIcon = () => (
 );
 
 // Star icon for reviews
-const StarIcon = ({ filled }: { filled: boolean }) => (
-  <svg className="w-5 h-5" viewBox="0 0 20 20" fill={filled ? "#d4af37" : "none"} stroke="#d4af37">
+const StarIcon = () => (
+  <svg className="w-5 h-5 text-[#E85D4C]" viewBox="0 0 20 20" fill="currentColor">
     <path d="M10 2l2.39 4.84 5.34.78-3.87 3.77.91 5.32L10 14.27l-4.77 2.51.91-5.32-3.87-3.77 5.34-.78L10 2z" />
   </svg>
 );
@@ -30,25 +30,33 @@ export default function Home() {
       name: "The Mimosa Set",
       description: "Crystal glassware for the perfect morning pour",
       price: "$185",
-      tag: "Bestseller"
+      tag: "Bestseller",
+      emoji: "🥂",
+      color: "bg-[#334FB4]"
     },
     {
       name: "Breakfast in Bed Tray",
       description: "Handcrafted walnut with brass accents",
       price: "$245",
-      tag: "New"
+      tag: "New",
+      emoji: "🛏️",
+      color: "bg-[#A42325]"
     },
     {
       name: "The Champagne Robe",
       description: "Silk-lined comfort meets morning elegance",
       price: "$320",
-      tag: "Limited"
+      tag: "Popular",
+      emoji: "👘",
+      color: "bg-[#7A9E7E]"
     },
     {
       name: "Caviar Service Set",
       description: "Mother of pearl spoons, crystal bowl",
       price: "$425",
-      tag: "Luxury"
+      tag: "Luxe",
+      emoji: "🥄",
+      color: "bg-[#E85D4C]"
     }
   ];
 
@@ -56,67 +64,58 @@ export default function Home() {
     {
       name: "Alexandra M.",
       role: "Fashion Executive",
-      quote: "Finally, a brand that understands mornings should feel like a celebration, not a chore."
+      quote: "Finally, a brand that understands mornings should feel like a celebration, not a chore.",
+      color: "bg-[#334FB4]"
     },
     {
       name: "James R.",
       role: "Hotel Owner",
-      quote: "We've outfitted our suites with Hotel Breakfast. Guests constantly ask where they can buy pieces."
+      quote: "We've outfitted our suites with Hotel Breakfast. Guests constantly ask where they can buy pieces.",
+      color: "bg-[#A42325]"
     },
     {
       name: "Sophia L.",
       role: "Interior Designer",
-      quote: "The attention to detail is impeccable. Every piece feels intentional and luxurious."
+      quote: "The attention to detail is impeccable. Every piece feels intentional and luxurious.",
+      color: "bg-[#7A9E7E]"
     }
   ];
 
-  const features = [
-    {
-      icon: "🥂",
-      title: "Morning Rituals",
-      description: "Transform your wake-up routine into a daily celebration"
-    },
-    {
-      icon: "✨",
-      title: "Luxury Materials",
-      description: "Handcrafted from the finest materials across the globe"
-    },
-    {
-      icon: "🛎️",
-      title: "Hotel-Grade",
-      description: "The same quality found in the world's finest establishments"
-    },
-    {
-      icon: "🎁",
-      title: "Gift Ready",
-      description: "Signature packaging for the perfect present"
-    }
+  const vibes = [
+    { emoji: "🥐", label: "Croissants" },
+    { emoji: "🍳", label: "Eggs Benny" },
+    { emoji: "🥂", label: "Mimosas" },
+    { emoji: "☕", label: "Espresso" },
+    { emoji: "🍓", label: "Fresh Berries" },
+    { emoji: "🧇", label: "Waffles" },
+    { emoji: "🥞", label: "Pancakes" },
+    { emoji: "🍊", label: "Fresh Juice" },
   ];
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a]">
+    <div className="min-h-screen bg-[#FFF6E1]">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 glass">
+      <nav className="fixed top-0 w-full z-50 bg-[#FFF6E1]/90 backdrop-blur-md border-b border-black/5">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-[#d4af37]"><ChampagneIcon /></span>
-              <span className="text-xl font-bold tracking-tight">HOTEL BREAKFAST</span>
+              <span className="text-[#334FB4]"><ChampagneIcon /></span>
+              <span className="text-xl font-bold tracking-tight text-[#1a1a1a]">HOTEL BREAKFAST</span>
             </div>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8">
-              <a href="#collection" className="text-white/70 hover:text-white transition-colors">Collection</a>
-              <a href="#about" className="text-white/70 hover:text-white transition-colors">About</a>
-              <a href="#testimonials" className="text-white/70 hover:text-white transition-colors">Reviews</a>
-              <button className="px-6 py-2 bg-[#d4af37] text-black font-semibold rounded-full hover:bg-[#f5e6b3] transition-colors">
+              <a href="#collection" className="text-[#1a1a1a]/70 hover:text-[#334FB4] transition-colors font-medium">Collection</a>
+              <a href="#about" className="text-[#1a1a1a]/70 hover:text-[#334FB4] transition-colors font-medium">About</a>
+              <a href="#testimonials" className="text-[#1a1a1a]/70 hover:text-[#334FB4] transition-colors font-medium">Reviews</a>
+              <button className="px-6 py-2.5 bg-[#334FB4] text-white font-semibold rounded-full hover:bg-[#4A6BD4] transition-colors shadow-lg shadow-[#334FB4]/20">
                 Shop Now
               </button>
             </div>
 
             {/* Mobile Menu Button */}
             <button
-              className="md:hidden text-white"
+              className="md:hidden text-[#1a1a1a]"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -131,12 +130,12 @@ export default function Home() {
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="md:hidden mt-4 pb-4 border-t border-white/10 pt-4">
+            <div className="md:hidden mt-4 pb-4 border-t border-black/5 pt-4">
               <div className="flex flex-col gap-4">
-                <a href="#collection" className="text-white/70 hover:text-white transition-colors">Collection</a>
-                <a href="#about" className="text-white/70 hover:text-white transition-colors">About</a>
-                <a href="#testimonials" className="text-white/70 hover:text-white transition-colors">Reviews</a>
-                <button className="px-6 py-2 bg-[#d4af37] text-black font-semibold rounded-full hover:bg-[#f5e6b3] transition-colors w-full">
+                <a href="#collection" className="text-[#1a1a1a]/70 hover:text-[#334FB4] transition-colors font-medium">Collection</a>
+                <a href="#about" className="text-[#1a1a1a]/70 hover:text-[#334FB4] transition-colors font-medium">About</a>
+                <a href="#testimonials" className="text-[#1a1a1a]/70 hover:text-[#334FB4] transition-colors font-medium">Reviews</a>
+                <button className="px-6 py-2.5 bg-[#334FB4] text-white font-semibold rounded-full hover:bg-[#4A6BD4] transition-colors w-full">
                   Shop Now
                 </button>
               </div>
@@ -147,57 +146,60 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a]" />
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-[100px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#d4af37]/5 rounded-full blur-[100px]" />
+        {/* Background shapes */}
+        <div className="absolute top-20 right-10 w-72 h-72 bg-[#334FB4]/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#E85D4C]/10 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#7A9E7E]/5 rounded-full blur-3xl" />
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
           <div className="animate-fade-in-up">
-            <p className="text-[#d4af37] text-sm tracking-[0.3em] uppercase mb-6">Luxury Morning Rituals</p>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+            {/* Fun badge */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-8">
+              <span className="animate-wiggle inline-block">🥂</span>
+              <span className="text-sm font-medium text-[#334FB4]">Luxury Morning Rituals</span>
+            </div>
+
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight text-[#1a1a1a]">
               Because Champagne<br />
-              <span className="gold-gradient">is a Morning Drink</span>
+              <span className="text-gradient-navy">is a Morning Drink</span>
             </h1>
-            <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto mb-10">
+            <p className="text-[#1a1a1a]/60 text-lg md:text-xl max-w-2xl mx-auto mb-10">
               Elevate your morning ritual with curated luxury breakfast essentials.
-              Because every day deserves to start with intention.
+              Because every day deserves to start with a little magic.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-[#d4af37] text-black font-bold rounded-full hover:bg-[#f5e6b3] transition-all hover-glow animate-pulse-gold">
-                Explore Collection
+              <button className="px-8 py-4 bg-[#334FB4] text-white font-bold rounded-full hover:bg-[#4A6BD4] transition-all shadow-xl shadow-[#334FB4]/25 hover-lift">
+                Explore Collection →
               </button>
-              <button className="px-8 py-4 border border-white/20 text-white font-semibold rounded-full hover:bg-white/10 transition-all">
+              <button className="px-8 py-4 bg-white text-[#1a1a1a] font-semibold rounded-full hover:bg-[#F5E6C8] transition-all shadow-lg border border-black/5">
                 Our Story
               </button>
             </div>
           </div>
 
-          {/* Floating champagne icon */}
-          <div className="mt-20 animate-float">
-            <div className="w-20 h-20 mx-auto border border-[#d4af37]/30 rounded-full flex items-center justify-center">
-              <span className="text-4xl">🥂</span>
-            </div>
+          {/* Floating emojis */}
+          <div className="mt-16 flex justify-center gap-6">
+            <span className="text-4xl animate-float" style={{ animationDelay: '0s' }}>🥐</span>
+            <span className="text-4xl animate-float" style={{ animationDelay: '0.2s' }}>🥂</span>
+            <span className="text-4xl animate-float" style={{ animationDelay: '0.4s' }}>☕</span>
+            <span className="text-4xl animate-float" style={{ animationDelay: '0.6s' }}>🍳</span>
+            <span className="text-4xl animate-float" style={{ animationDelay: '0.8s' }}>🧇</span>
           </div>
         </div>
       </section>
 
       {/* Marquee Section */}
-      <section className="py-8 border-y border-white/10 overflow-hidden">
+      <section className="py-6 bg-[#334FB4] overflow-hidden">
         <div className="gradient-mask">
-          <div className="animate-marquee whitespace-nowrap flex gap-8">
+          <div className="animate-marquee whitespace-nowrap flex gap-12">
             {[...Array(2)].map((_, i) => (
-              <div key={i} className="flex gap-8 items-center">
-                <span className="text-white/40 text-sm tracking-widest">LUXURY BREAKFAST</span>
-                <span className="text-[#d4af37]">✦</span>
-                <span className="text-white/40 text-sm tracking-widest">MORNING RITUALS</span>
-                <span className="text-[#d4af37]">✦</span>
-                <span className="text-white/40 text-sm tracking-widest">CHAMPAGNE LIFESTYLE</span>
-                <span className="text-[#d4af37]">✦</span>
-                <span className="text-white/40 text-sm tracking-widest">HOTEL QUALITY</span>
-                <span className="text-[#d4af37]">✦</span>
-                <span className="text-white/40 text-sm tracking-widest">CURATED ELEGANCE</span>
-                <span className="text-[#d4af37]">✦</span>
+              <div key={i} className="flex gap-12 items-center">
+                {vibes.map((vibe, j) => (
+                  <div key={j} className="flex items-center gap-3">
+                    <span className="text-2xl">{vibe.emoji}</span>
+                    <span className="text-white/90 text-sm font-medium tracking-wide">{vibe.label}</span>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -209,30 +211,37 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <p className="text-[#d4af37] text-sm tracking-[0.3em] uppercase mb-4">The Philosophy</p>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="inline-block px-4 py-1.5 bg-[#E85D4C]/10 text-[#E85D4C] text-sm font-semibold rounded-full mb-4">
+                Our Philosophy
+              </span>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#1a1a1a]">
                 Mornings are<br />
-                <span className="gold-gradient">meant to be savored</span>
+                <span className="text-gradient-coral">meant to be savored</span>
               </h2>
-              <p className="text-white/60 text-lg leading-relaxed mb-6">
+              <p className="text-[#1a1a1a]/60 text-lg leading-relaxed mb-6">
                 We believe the first hours of your day set the tone for everything that follows.
                 Hotel Breakfast was born from the desire to bring that indulgent hotel morning
                 experience into your daily life.
               </p>
-              <p className="text-white/60 text-lg leading-relaxed">
+              <p className="text-[#1a1a1a]/60 text-lg leading-relaxed">
                 Every piece in our collection is thoughtfully designed to transform the mundane
-                into the magnificent—because you deserve to feel like a guest in your own home.
+                into the magnificent—because you deserve to feel like a VIP every single morning.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              {features.map((feature, index) => (
+              {[
+                { emoji: "🌅", title: "Morning Rituals", desc: "Transform your wake-up into a daily celebration" },
+                { emoji: "✨", title: "Quality First", desc: "Handcrafted from the finest materials" },
+                { emoji: "🏨", title: "Hotel-Grade", desc: "Found in the world's finest establishments" },
+                { emoji: "🎁", title: "Gift Ready", desc: "Signature packaging for perfect presents" }
+              ].map((feature, index) => (
                 <div
                   key={index}
-                  className="glass rounded-2xl p-6 hover-glow transition-all cursor-default"
+                  className="bg-white rounded-2xl p-6 shadow-sm hover-lift cursor-default border border-black/5"
                 >
-                  <span className="text-3xl mb-4 block">{feature.icon}</span>
-                  <h3 className="font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-white/50 text-sm">{feature.description}</p>
+                  <span className="text-3xl mb-4 block">{feature.emoji}</span>
+                  <h3 className="font-bold text-[#1a1a1a] mb-2">{feature.title}</h3>
+                  <p className="text-[#1a1a1a]/50 text-sm">{feature.desc}</p>
                 </div>
               ))}
             </div>
@@ -241,13 +250,15 @@ export default function Home() {
       </section>
 
       {/* Collection Section */}
-      <section id="collection" className="py-24 px-6 bg-gradient-to-b from-transparent via-[#d4af37]/5 to-transparent">
+      <section id="collection" className="py-24 px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[#d4af37] text-sm tracking-[0.3em] uppercase mb-4">The Collection</p>
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <span className="inline-block px-4 py-1.5 bg-[#334FB4]/10 text-[#334FB4] text-sm font-semibold rounded-full mb-4">
+              The Collection
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1a1a1a]">
               Curated for the<br />
-              <span className="gold-gradient">discerning morning</span>
+              <span className="text-gradient-navy">discerning morning</span>
             </h2>
           </div>
 
@@ -255,22 +266,22 @@ export default function Home() {
             {products.map((product, index) => (
               <div
                 key={index}
-                className="group glass rounded-2xl overflow-hidden hover-glow transition-all cursor-pointer"
+                className="group bg-[#FFF6E1] rounded-3xl overflow-hidden hover-lift cursor-pointer border border-black/5"
               >
-                <div className="aspect-square bg-gradient-to-br from-[#1a1a1a] to-[#0a0a0a] flex items-center justify-center relative">
-                  <span className="text-6xl group-hover:scale-110 transition-transform">🥂</span>
-                  <span className="absolute top-4 right-4 text-xs bg-[#d4af37] text-black px-2 py-1 rounded-full font-semibold">
+                <div className="aspect-square flex items-center justify-center relative p-8">
+                  <span className="text-7xl group-hover:scale-110 transition-transform duration-300">{product.emoji}</span>
+                  <span className={`absolute top-4 right-4 text-xs ${product.color} text-white px-3 py-1 rounded-full font-semibold`}>
                     {product.tag}
                   </span>
                 </div>
-                <div className="p-6">
-                  <h3 className="font-bold text-lg mb-2 group-hover:text-[#d4af37] transition-colors">
+                <div className="p-6 bg-white">
+                  <h3 className="font-bold text-lg mb-2 text-[#1a1a1a] group-hover:text-[#334FB4] transition-colors">
                     {product.name}
                   </h3>
-                  <p className="text-white/50 text-sm mb-4">{product.description}</p>
+                  <p className="text-[#1a1a1a]/50 text-sm mb-4">{product.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-[#d4af37] font-bold">{product.price}</span>
-                    <button className="text-sm text-white/70 hover:text-white transition-colors">
+                    <span className="text-[#334FB4] font-bold text-lg">{product.price}</span>
+                    <button className="text-sm text-[#1a1a1a]/60 hover:text-[#334FB4] transition-colors font-medium">
                       Add to Cart →
                     </button>
                   </div>
@@ -280,21 +291,47 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-12">
-            <button className="px-8 py-4 border border-[#d4af37] text-[#d4af37] font-semibold rounded-full hover:bg-[#d4af37] hover:text-black transition-all">
+            <button className="px-8 py-4 bg-[#1a1a1a] text-white font-semibold rounded-full hover:bg-[#334FB4] transition-all shadow-lg">
               View Full Collection
             </button>
           </div>
         </div>
       </section>
 
+      {/* Fun Stats Banner */}
+      <section className="py-12 px-6 bg-[#A42325]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <p className="text-4xl md:text-5xl font-bold text-white">15K+</p>
+              <p className="text-white/70 mt-1">Happy Mornings</p>
+            </div>
+            <div>
+              <p className="text-4xl md:text-5xl font-bold text-white">200+</p>
+              <p className="text-white/70 mt-1">Hotel Partners</p>
+            </div>
+            <div>
+              <p className="text-4xl md:text-5xl font-bold text-white">4.9⭐</p>
+              <p className="text-white/70 mt-1">Average Rating</p>
+            </div>
+            <div>
+              <p className="text-4xl md:text-5xl font-bold text-white">50+</p>
+              <p className="text-white/70 mt-1">Countries</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-24 px-6">
+      <section id="testimonials" className="py-24 px-6 bg-[#FFF6E1]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <p className="text-[#d4af37] text-sm tracking-[0.3em] uppercase mb-4">Testimonials</p>
-            <h2 className="text-4xl md:text-5xl font-bold">
+            <span className="inline-block px-4 py-1.5 bg-[#7A9E7E]/20 text-[#5A7E5E] text-sm font-semibold rounded-full mb-4">
+              Love Letters
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-[#1a1a1a]">
               What our guests<br />
-              <span className="gold-gradient">are saying</span>
+              <span className="text-[#7A9E7E]">are saying</span>
             </h2>
           </div>
 
@@ -302,23 +339,23 @@ export default function Home() {
             {testimonials.map((testimonial, index) => (
               <div
                 key={index}
-                className="glass rounded-2xl p-8 hover-glow transition-all"
+                className="bg-white rounded-3xl p-8 hover-lift shadow-sm border border-black/5"
               >
                 <div className="flex gap-1 mb-6">
                   {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} filled={true} />
+                    <StarIcon key={i} />
                   ))}
                 </div>
-                <p className="text-white/80 text-lg mb-6 leading-relaxed">
+                <p className="text-[#1a1a1a]/80 text-lg mb-6 leading-relaxed">
                   &ldquo;{testimonial.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#d4af37] to-[#f5e6b3] flex items-center justify-center text-black font-bold">
+                  <div className={`w-12 h-12 rounded-full ${testimonial.color} flex items-center justify-center text-white font-bold text-lg`}>
                     {testimonial.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="font-semibold">{testimonial.name}</p>
-                    <p className="text-white/50 text-sm">{testimonial.role}</p>
+                    <p className="font-semibold text-[#1a1a1a]">{testimonial.name}</p>
+                    <p className="text-[#1a1a1a]/50 text-sm">{testimonial.role}</p>
                   </div>
                 </div>
               </div>
@@ -327,38 +364,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 px-6 border-y border-white/10">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <p className="text-4xl md:text-5xl font-bold gold-gradient">15K+</p>
-              <p className="text-white/50 mt-2">Happy Guests</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold gold-gradient">200+</p>
-              <p className="text-white/50 mt-2">Hotel Partners</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold gold-gradient">4.9</p>
-              <p className="text-white/50 mt-2">Average Rating</p>
-            </div>
-            <div>
-              <p className="text-4xl md:text-5xl font-bold gold-gradient">50+</p>
-              <p className="text-white/50 mt-2">Countries</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Newsletter Section */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-[#334FB4]">
         <div className="max-w-3xl mx-auto text-center">
-          <span className="text-5xl mb-6 block animate-float">💌</span>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Join the <span className="gold-gradient">Morning Club</span>
+          <span className="text-6xl mb-6 block animate-bounce-gentle">💌</span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+            Join the Morning Club
           </h2>
-          <p className="text-white/60 mb-8">
+          <p className="text-white/70 mb-8 text-lg">
             Be the first to know about new collections, exclusive offers, and morning inspiration.
           </p>
           <form
@@ -370,37 +383,37 @@ export default function Home() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-6 py-4 bg-white/5 border border-white/10 rounded-full text-white placeholder:text-white/40 focus:outline-none focus:border-[#d4af37] transition-colors"
+              className="flex-1 px-6 py-4 bg-white/10 border border-white/20 rounded-full text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20 transition-colors"
             />
             <button
               type="submit"
-              className="px-8 py-4 bg-[#d4af37] text-black font-bold rounded-full hover:bg-[#f5e6b3] transition-colors whitespace-nowrap"
+              className="px-8 py-4 bg-white text-[#334FB4] font-bold rounded-full hover:bg-[#FFF6E1] transition-colors whitespace-nowrap shadow-lg"
             >
-              Subscribe
+              Subscribe ✨
             </button>
           </form>
-          <p className="text-white/30 text-sm mt-4">
+          <p className="text-white/50 text-sm mt-4">
             No spam, just champagne-worthy content. Unsubscribe anytime.
           </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-16 px-6 border-t border-white/10">
+      <footer className="py-16 px-6 bg-[#1a1a1a]">
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-[#d4af37]"><ChampagneIcon /></span>
-                <span className="text-xl font-bold tracking-tight">HOTEL BREAKFAST</span>
+                <span className="text-white"><ChampagneIcon /></span>
+                <span className="text-xl font-bold tracking-tight text-white">HOTEL BREAKFAST</span>
               </div>
               <p className="text-white/50 max-w-sm">
                 Elevating morning rituals with luxury breakfast essentials since 2020.
-                Because every day deserves to start with champagne.
+                Because every day deserves to start with champagne. 🥂
               </p>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Shop</h4>
+              <h4 className="font-semibold mb-4 text-white">Shop</h4>
               <ul className="space-y-2 text-white/50">
                 <li><a href="#" className="hover:text-white transition-colors">Collections</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">New Arrivals</a></li>
@@ -409,7 +422,7 @@ export default function Home() {
               </ul>
             </div>
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
+              <h4 className="font-semibold mb-4 text-white">Company</h4>
               <ul className="space-y-2 text-white/50">
                 <li><a href="#" className="hover:text-white transition-colors">About</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>

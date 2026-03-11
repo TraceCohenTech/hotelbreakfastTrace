@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { useCart } from '@/lib/cart-context';
+import { getProducts, type ShopifyProduct } from '@/lib/shopify';
 
 // Product data from Hotel Breakfast
 const products = [
@@ -19,7 +21,8 @@ const products = [
       { name: "Navy", hex: "#334FB4" },
       { name: "Cream", hex: "#FFF6E1" },
       { name: "Burgundy", hex: "#A42325" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47282976063742"
   },
   {
     id: 2,
@@ -35,7 +38,8 @@ const products = [
       { name: "White", hex: "#FFFFFF" },
       { name: "Black", hex: "#1a1a1a" },
       { name: "Sage", hex: "#7A9E7E" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47282952405246"
   },
   {
     id: 3,
@@ -50,7 +54,8 @@ const products = [
     colors: [
       { name: "Black", hex: "#1a1a1a" },
       { name: "White", hex: "#FFFFFF" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47414586147070"
   },
   {
     id: 4,
@@ -65,7 +70,8 @@ const products = [
     colors: [
       { name: "Cream", hex: "#FFF6E1" },
       { name: "Black", hex: "#1a1a1a" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47204952211710"
   },
   {
     id: 5,
@@ -80,7 +86,8 @@ const products = [
     colors: [
       { name: "Natural", hex: "#F5E6C8" },
       { name: "Black", hex: "#1a1a1a" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47359996821758"
   },
   {
     id: 6,
@@ -96,7 +103,8 @@ const products = [
       { name: "Navy", hex: "#334FB4" },
       { name: "Black", hex: "#1a1a1a" },
       { name: "Cream", hex: "#FFF6E1" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47281022140670"
   },
   {
     id: 7,
@@ -111,7 +119,8 @@ const products = [
     colors: [
       { name: "Denim Blue", hex: "#6B8CAE" },
       { name: "Washed Black", hex: "#3a3a3a" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47241666658558"
   },
   {
     id: 8,
@@ -126,7 +135,8 @@ const products = [
     colors: [
       { name: "Natural", hex: "#F5E6C8" },
       { name: "Black", hex: "#1a1a1a" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47209732440318"
   },
   {
     id: 9,
@@ -140,7 +150,8 @@ const products = [
     sizes: ["30×60"],
     colors: [
       { name: "Terracotta", hex: "#E07A5F" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47435318821118"
   },
   {
     id: 10,
@@ -154,7 +165,8 @@ const products = [
     sizes: ["30×60"],
     colors: [
       { name: "Green", hex: "#7A9E7E" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47435314462974"
   },
   {
     id: 11,
@@ -168,7 +180,8 @@ const products = [
     sizes: ["30×60"],
     colors: [
       { name: "Sunrise", hex: "#FFB347" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47435312759038"
   },
   {
     id: 12,
@@ -182,45 +195,9 @@ const products = [
     sizes: ["30×60"],
     colors: [
       { name: "Ocean Blue", hex: "#334FB4" }
-    ]
+    ],
+    variantId: "gid://shopify/ProductVariant/47207504969982"
   },
-];
-
-// Lifestyle Bundles
-const bundles = [
-  {
-    id: 101,
-    name: "Poolside Essentials",
-    description: "Everything you need for the perfect pool day. Includes towel, hat, and tote.",
-    items: [products[8], products[5], products[4]], // Terracotta Towel, Organic Cap, Everyday Tote
-    originalPrice: 126,
-    bundlePrice: 107,
-    discount: 15,
-    image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5885969260573620490_2048.jpg",
-    tag: "SAVE 15%"
-  },
-  {
-    id: 102,
-    name: "Champagne Brunch Kit",
-    description: "The complete morning look. Crewneck, cap, and tote for effortless weekend style.",
-    items: [products[0], products[6], products[4]], // Crewneck, Denim Dad Hat, Tote
-    originalPrice: 170,
-    bundlePrice: 145,
-    discount: 15,
-    image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg",
-    tag: "BESTSELLER"
-  },
-  {
-    id: 103,
-    name: "Beach Bum Bundle",
-    description: "Two premium towels and a sun hat. Ready for any beach adventure.",
-    items: [products[8], products[10], products[7]], // Terracotta Towel, Sun Towel, Sun Hat
-    originalPrice: 133,
-    bundlePrice: 113,
-    discount: 15,
-    image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/665358233442400327_2048.jpg",
-    tag: "SUMMER FAVE"
-  }
 ];
 
 // Recently purchased notifications data
@@ -230,9 +207,9 @@ const recentPurchases = [
   { name: "Emma", location: "Brooklyn, NY", product: "The Everyday Tote", time: "8 min ago" },
   { name: "Jake", location: "Austin, TX", product: "Do Not Disturb Tee", time: "12 min ago" },
   { name: "Olivia", location: "San Francisco, CA", product: "The Organic Cap", time: "15 min ago" },
-  { name: "Liam", location: "Chicago, IL", product: "Beach Bum Bundle", time: "18 min ago" },
+  { name: "Liam", location: "Chicago, IL", product: "Sun Towel", time: "18 min ago" },
   { name: "Sophia", location: "Seattle, WA", product: "The Denim Dad Hat", time: "22 min ago" },
-  { name: "Noah", location: "Denver, CO", product: "Poolside Essentials", time: "25 min ago" },
+  { name: "Noah", location: "Denver, CO", product: "The Sun Hat", time: "25 min ago" },
 ];
 
 const featuredProducts = products.slice(0, 4);
@@ -293,21 +270,15 @@ interface Product {
   hoverColor: string;
   sizes: string[];
   colors: { name: string; hex: string }[];
-}
-
-interface CartItem {
-  product: Product;
-  size: string;
-  color: string;
-  quantity: number;
+  variantId?: string; // Shopify variant GID — fill these in from your Shopify admin
 }
 
 export default function Home() {
-  const [email, setEmail] = useState('');
+  const { cartCount, addItem, openCart, isConfigured } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [shopifyProducts, setShopifyProducts] = useState<ShopifyProduct[]>([]);
   const [activeCategory, setActiveCategory] = useState('All');
   const [isVisible, setIsVisible] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [visibleProducts, setVisibleProducts] = useState<Set<number>>(new Set());
   const heroRef = useRef<HTMLDivElement>(null);
@@ -418,17 +389,64 @@ export default function Home() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
+  // Fetch Shopify products for variant lookup
+  useEffect(() => {
+    getProducts()
+      .then((data) => setShopifyProducts(data))
+      .catch(() => {
+        // Silently fall back to hardcoded products
+      });
+  }, []);
+
+  const findVariantId = useCallback(
+    (product: Product, size: string, color: string): string | undefined => {
+      // Find matching Shopify product by title
+      const shopifyProduct = shopifyProducts.find(
+        (sp) => sp.title.toLowerCase() === product.name.toLowerCase()
+      );
+      if (!shopifyProduct) return product.variantId;
+
+      // Search variants for matching size + color
+      const matchedVariant = shopifyProduct.variants.edges.find(({ node }) => {
+        const options = node.selectedOptions;
+        const sizeMatch = options.find(
+          (o) => o.name.toLowerCase() === 'size' && o.value.toLowerCase() === size.toLowerCase()
+        );
+        const colorMatch = options.find(
+          (o) => o.name.toLowerCase() === 'color' && o.value.toLowerCase() === color.toLowerCase()
+        );
+        // If the product has both size and color options, both must match
+        const hasSizeOption = shopifyProduct.options.some((o) => o.name.toLowerCase() === 'size');
+        const hasColorOption = shopifyProduct.options.some((o) => o.name.toLowerCase() === 'color');
+        if (hasSizeOption && hasColorOption) return sizeMatch && colorMatch;
+        if (hasSizeOption) return sizeMatch;
+        if (hasColorOption) return colorMatch;
+        return false;
+      });
+
+      return matchedVariant ? matchedVariant.node.id : product.variantId;
+    },
+    [shopifyProducts]
+  );
+
   const filteredProducts = activeCategory === 'All'
     ? products
     : products.filter(p => p.category === activeCategory);
 
-  const addToCart = useCallback((product?: Product, size?: string, color?: string) => {
-    setCartCount(prev => prev + 1);
+  const addToCart = useCallback((product?: Product, size?: string, color?: string, variantOverride?: string) => {
+    const variantId = variantOverride || product?.variantId;
+    if (variantId && isConfigured) {
+      // Use real Shopify cart
+      addItem(variantId);
+    } else if (!isConfigured) {
+      // Fallback: open cart drawer with "not configured" message
+      openCart();
+    }
     // Close quick view if open
     if (quickViewProduct) {
       setQuickViewProduct(null);
     }
-  }, [quickViewProduct]);
+  }, [quickViewProduct, addItem, openCart, isConfigured]);
 
   const openQuickView = (product: Product) => {
     setQuickViewProduct(product);
@@ -660,7 +678,10 @@ export default function Home() {
 
                 {/* Add to Cart Button */}
                 <button
-                  onClick={() => addToCart(quickViewProduct, selectedSize, selectedColor)}
+                  onClick={() => {
+                    const matchedVariantId = findVariantId(quickViewProduct, selectedSize, selectedColor);
+                    addToCart(quickViewProduct, selectedSize, selectedColor, matchedVariantId);
+                  }}
                   className="mt-auto w-full py-4 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-3"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -715,7 +736,7 @@ export default function Home() {
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center gap-8">
-              {['Shop All', 'Bundles', 'Bestsellers', 'Our Story'].map((item, i) => (
+              {['Shop All', 'Bestsellers', 'Our Story'].map((item, i) => (
                 <a
                   key={item}
                   href={`#${item.toLowerCase().replace(' ', '')}`}
@@ -729,12 +750,10 @@ export default function Home() {
 
             {/* Right Side */}
             <div className="flex items-center gap-4">
-              <button className="hidden sm:flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#334FB4]/10 transition-all hover-scale">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-              <button className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#334FB4]/10 transition-all hover-scale group">
+              <button
+                onClick={openCart}
+                className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#334FB4]/10 transition-all hover-scale group"
+              >
                 <svg className="w-5 h-5 group-hover:animate-wiggle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
@@ -763,7 +782,7 @@ export default function Home() {
           {isMenuOpen && (
             <div className="lg:hidden mt-4 pb-4 border-t border-black/10 pt-4 animate-slide-up">
               <div className="flex flex-col gap-4">
-                {['Shop All', 'Bundles', 'Bestsellers', 'Our Story'].map((item, i) => (
+                {['Shop All', 'Bestsellers', 'Our Story'].map((item, i) => (
                   <a
                     key={item}
                     href={`#${item.toLowerCase().replace(' ', '')}`}
@@ -834,8 +853,8 @@ export default function Home() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
                 </a>
-                <a href="#bundles" className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-[#334FB4] transition-all flex items-center justify-center hover-glow">
-                  Shop Bundles
+                <a href="#shop" className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-[#334FB4] transition-all flex items-center justify-center hover-glow">
+                  View All Products
                 </a>
               </div>
 
@@ -968,99 +987,6 @@ export default function Home() {
               >
                 {logo.display}
               </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Shop the Look - Bundles Section */}
-      <section id="bundles" className="py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-br from-[#FFF6E1] to-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#7A9E7E] to-[#5A7E5E] text-white text-xs font-bold rounded-full mb-4 tracking-wide animate-pulse-scale">
-              🎁 SAVE 15%
-            </span>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-6">
-              Shop the <span className="gradient-text">Look</span>
-            </h2>
-            <p className="text-[#1a1a1a]/60 max-w-2xl mx-auto text-lg">
-              Curated bundles designed to go together. Save 15% when you shop the complete look.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {bundles.map((bundle, index) => (
-              <div
-                key={bundle.id}
-                className="group bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border-2 border-transparent hover:border-[#7A9E7E] animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                {/* Bundle Image */}
-                <div className="aspect-[4/3] relative overflow-hidden">
-                  <Image
-                    src={bundle.image}
-                    alt={bundle.name}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                  <div className="absolute top-4 left-4">
-                    <span className="px-4 py-1.5 bg-[#7A9E7E] text-white text-xs font-bold rounded-full shadow-lg">
-                      {bundle.tag}
-                    </span>
-                  </div>
-                  <div className="absolute bottom-4 left-4 right-4">
-                    <h3 className="text-2xl font-black text-white mb-1">{bundle.name}</h3>
-                    <p className="text-white/80 text-sm">{bundle.items.length} items included</p>
-                  </div>
-                </div>
-
-                {/* Bundle Details */}
-                <div className="p-6">
-                  <p className="text-[#1a1a1a]/60 text-sm mb-4">{bundle.description}</p>
-
-                  {/* Included Items */}
-                  <div className="flex items-center gap-2 mb-4">
-                    {bundle.items.map((item, i) => (
-                      <div key={i} className="relative w-12 h-12 rounded-xl overflow-hidden border-2 border-white shadow-md -ml-2 first:ml-0">
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                    <span className="text-xs text-[#1a1a1a]/50 ml-2">
-                      {bundle.items.map(i => i.name.split(' ')[1]).join(' + ')}
-                    </span>
-                  </div>
-
-                  {/* Pricing */}
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl font-black text-[#7A9E7E]">${bundle.bundlePrice}</span>
-                      <span className="text-lg text-[#1a1a1a]/30 line-through">${bundle.originalPrice}</span>
-                    </div>
-                    <span className="text-xs font-bold text-[#7A9E7E] bg-[#7A9E7E]/10 px-3 py-1 rounded-full">
-                      Save ${bundle.originalPrice - bundle.bundlePrice}
-                    </span>
-                  </div>
-
-                  {/* Add to Cart */}
-                  <button
-                    onClick={() => {
-                      setCartCount(prev => prev + bundle.items.length);
-                    }}
-                    className="w-full py-3 bg-gradient-to-r from-[#7A9E7E] to-[#5A7E5E] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    Add Bundle to Cart
-                  </button>
-                </div>
-              </div>
             ))}
           </div>
         </div>
@@ -1433,45 +1359,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Newsletter */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6 bg-gradient-to-br from-[#334FB4] via-[#4A6BD4] to-[#334FB4] animate-gradient bg-[length:200%_200%] relative overflow-hidden">
-        {/* Floating elements */}
-        <div className="absolute top-10 left-10 text-6xl animate-float opacity-20">🥂</div>
-        <div className="absolute bottom-10 right-10 text-5xl animate-float-reverse opacity-20">✨</div>
-        <div className="absolute top-1/2 left-1/4 text-4xl animate-wiggle opacity-20">☀️</div>
-
-        <div className="max-w-3xl mx-auto text-center relative z-10">
-          <div className="text-7xl sm:text-8xl mb-8 animate-float">🥂</div>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-6 text-white animate-text-glow">
-            Join the Morning Club
-          </h2>
-          <p className="text-white/80 mb-10 text-lg sm:text-xl">
-            Get <span className="font-bold text-white">15% off</span> your first order + exclusive access to new drops, sales, and morning inspiration.
-          </p>
-          <form
-            className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto"
-            onSubmit={(e) => e.preventDefault()}
-          >
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 px-6 py-4 bg-white/10 border-2 border-white/30 rounded-full text-white placeholder:text-white/50 focus:outline-none focus:bg-white/20 focus:border-white transition-all text-lg"
-            />
-            <button
-              type="submit"
-              className="btn-primary px-8 py-4 bg-white text-[#334FB4] font-bold rounded-full shadow-xl text-lg whitespace-nowrap"
-            >
-              Get 15% Off ✨
-            </button>
-          </form>
-          <p className="text-white/50 text-sm mt-6">
-            No spam, ever. Unsubscribe anytime.
-          </p>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="py-16 sm:py-20 px-4 sm:px-6 bg-[#1a1a1a]">
         <div className="max-w-7xl mx-auto">
@@ -1506,7 +1393,7 @@ export default function Home() {
               </div>
             </div>
             {[
-              { title: 'Shop', links: ['All Products', 'Bundles', 'Apparel', 'Accessories', 'Beach'] },
+              { title: 'Shop', links: ['All Products', 'Apparel', 'Accessories', 'Beach'] },
               { title: 'Help', links: ['FAQ', 'Shipping', 'Returns', 'Contact Us', 'Size Guide'] },
               { title: 'Company', links: ['Our Story', 'Sustainability', 'Press', 'Careers', 'Privacy'] },
             ].map((col, i) => (

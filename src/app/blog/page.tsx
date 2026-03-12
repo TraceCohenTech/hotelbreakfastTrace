@@ -106,13 +106,13 @@ export default function BlogPage() {
                   <span className="w-1 h-1 rounded-full bg-[#1C1C1C]/15" />
                   <span>{post.readTime}</span>
                 </div>
-                <h2 className="font-[family-name:var(--font-eb-garamond)] text-xl sm:text-2xl text-[#1C1C1C] mb-3 group-hover:text-[#C4553A] transition-colors">
+                <h2 className="font-[family-name:var(--font-eb-garamond)] text-xl sm:text-2xl text-[#1C1C1C] mb-3 group-hover:text-[#334FB4] transition-colors">
                   {post.title}
                 </h2>
                 <p className="text-[#1C1C1C]/50 text-sm leading-relaxed">
                   {post.excerpt}
                 </p>
-                <span className="inline-block mt-4 text-[#1C1C1C] font-semibold text-sm underline underline-offset-4 group-hover:text-[#C4553A] transition-colors">
+                <span className="inline-block mt-4 text-[#1C1C1C] font-semibold text-sm underline underline-offset-4 group-hover:text-[#334FB4] transition-colors">
                   Read More
                 </span>
               </div>

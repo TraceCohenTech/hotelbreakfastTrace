@@ -163,11 +163,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
                 href="/#shop"
                 className="group bg-white rounded-xl p-6 border border-black/5 hover:shadow-md hover:-translate-y-1 transition-all"
               >
-                <h3 className="font-semibold text-[#1C1C1C] group-hover:text-[#C4553A] transition-colors">
+                <h3 className="font-semibold text-[#1C1C1C] group-hover:text-[#334FB4] transition-colors">
                   {product.name}
                 </h3>
                 <p className="text-[#1C1C1C]/40 text-sm mt-1">{product.description}</p>
-                <span className="inline-block mt-3 text-[#1C1C1C] font-semibold text-sm underline underline-offset-4 group-hover:text-[#C4553A] transition-colors">
+                <span className="inline-block mt-3 text-[#1C1C1C] font-semibold text-sm underline underline-offset-4 group-hover:text-[#334FB4] transition-colors">
                   Shop Now
                 </span>
               </Link>

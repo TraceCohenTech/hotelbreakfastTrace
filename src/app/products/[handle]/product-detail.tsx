@@ -49,7 +49,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
       {/* Breadcrumbs */}
       <nav className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-2" aria-label="Breadcrumb">
-        <ol className="flex items-center gap-2 text-xs text-[#1C1C1C]/40">
+        <ol className="flex items-center gap-2 text-xs text-[#1C1C1C]/60">
           <li>
             <Link href="/" className="hover:text-[#1C1C1C] transition-colors">Home</Link>
           </li>
@@ -89,7 +89,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
           {/* Product Info */}
           <div className="flex flex-col">
-            <p className="text-xs text-[#C4553A] font-semibold uppercase tracking-[0.15em] mb-2">{product.category}</p>
+            <p className="text-xs text-[#334FB4] font-semibold uppercase tracking-[0.15em] mb-2">{product.category}</p>
             <h1 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-4">
               {product.name}
             </h1>
@@ -119,7 +119,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                       onClick={() => setSelectedColor(color.name)}
                       className={`w-8 h-8 rounded-full border-2 transition-all ${
                         selectedColor === color.name
-                          ? 'border-[#1C1C1C] scale-110'
+                          ? 'border-[#1C1C1C] scale-[1.15]'
                           : 'border-gray-200 hover:border-gray-400'
                       }`}
                       style={{ backgroundColor: color.hex }}
@@ -222,7 +222,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                   )}
                 </div>
                 <div>
-                  <p className="text-[10px] text-[#1C1C1C]/30 font-semibold uppercase tracking-wider mb-1">{related.category}</p>
+                  <p className="text-[10px] text-[#1C1C1C]/50 font-semibold uppercase tracking-wider mb-1">{related.category}</p>
                   <h3 className="font-medium text-sm text-[#1C1C1C] mb-1 group-hover:underline">
                     {related.name}
                   </h3>
@@ -243,7 +243,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
             </div>
             <span className="text-sm font-bold tracking-tight text-white">HOTEL BREAKFAST</span>
           </Link>
-          <p className="text-white/30 text-xs">
+          <p className="text-white/40 text-xs">
             &copy; {new Date().getFullYear()} Hotel Breakfast. Because Champagne is a Morning Drink.
           </p>
         </div>

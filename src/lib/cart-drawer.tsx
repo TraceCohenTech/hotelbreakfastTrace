@@ -23,7 +23,7 @@ export function CartDrawer() {
       />
 
       {/* Drawer */}
-      <div className="fixed top-0 right-0 bottom-0 z-[301] w-full max-w-md bg-white shadow-2xl flex flex-col animate-slide-in-right">
+      <div className="fixed top-0 right-0 bottom-0 z-[301] w-full max-w-md bg-white shadow-2xl flex flex-col animate-slide-in-right" role="dialog" aria-modal="true" aria-label="Shopping cart">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-black/5">
           <h2 className="text-lg font-bold text-[#1C1C1C]">
@@ -31,6 +31,7 @@ export function CartDrawer() {
           </h2>
           <button
             onClick={closeCart}
+            aria-label="Close cart"
             className="w-9 h-9 rounded-full hover:bg-[#F5F1EB] flex items-center justify-center transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,7 +71,7 @@ export function CartDrawer() {
         {/* Cart items */}
         {isConfigured && lines.length > 0 && (
           <>
-            <div className="flex-1 overflow-y-auto p-6 space-y-5">
+            <div className="flex-1 overflow-y-auto p-6 space-y-5 relative">
               {isLoading && (
                 <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
                   <div className="w-6 h-6 border-2 border-[#1C1C1C] border-t-transparent rounded-full animate-spin" />
@@ -132,7 +133,7 @@ export function CartDrawer() {
                         </button>
                         <button
                           onClick={() => removeItem(line.id)}
-                          className="ml-auto text-[#1C1C1C]/25 hover:text-[#C4553A] transition-colors"
+                          className="ml-auto text-[#1C1C1C]/40 hover:text-[#C4553A] transition-colors"
                           disabled={isLoading}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,7 +176,7 @@ export function CartDrawer() {
                 <span className="text-[#1C1C1C]/50 text-sm">Subtotal</span>
                 <span className="text-lg font-bold text-[#1C1C1C]">${subtotal.toFixed(2)}</span>
               </div>
-              <p className="text-[10px] text-[#1C1C1C]/30 text-center">
+              <p className="text-xs text-[#1C1C1C]/50 text-center">
                 Shipping & taxes calculated at checkout
               </p>
               <a

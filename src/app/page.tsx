@@ -410,6 +410,7 @@ export default function Home() {
           >
             <button
               onClick={closeQuickView}
+              aria-label="Close quick view"
               className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-gray-100 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -458,7 +459,7 @@ export default function Home() {
                           onClick={() => setSelectedColor(color.name)}
                           className={`w-8 h-8 rounded-full border-2 transition-all ${
                             selectedColor === color.name
-                              ? 'border-[#1C1C1C] scale-110'
+                              ? 'border-[#1C1C1C] scale-[1.15]'
                               : 'border-gray-200 hover:border-gray-400'
                           }`}
                           style={{ backgroundColor: color.hex }}
@@ -580,6 +581,7 @@ export default function Home() {
             <div className="flex items-center gap-3">
               <button
                 onClick={openCart}
+                aria-label={`Cart (${cartCount} items)`}
                 className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#F5F1EB] transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -594,6 +596,8 @@ export default function Home() {
               <button
                 className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#F5F1EB] transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
+                aria-label="Menu"
+                aria-expanded={isMenuOpen}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {isMenuOpen ? (
@@ -621,7 +625,7 @@ export default function Home() {
                     <Link
                       key={item.label}
                       href={item.href}
-                      className="text-[#1C1C1C] font-medium text-base hover:text-[#C4553A] transition-colors"
+                      className="text-[#1C1C1C] font-medium text-base hover:text-[#334FB4] transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.label}
@@ -630,7 +634,7 @@ export default function Home() {
                     <a
                       key={item.label}
                       href={item.href}
-                      className="text-[#1C1C1C] font-medium text-base hover:text-[#C4553A] transition-colors"
+                      className="text-[#1C1C1C] font-medium text-base hover:text-[#334FB4] transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {item.label}
@@ -674,7 +678,7 @@ export default function Home() {
               <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
                 Shop the Collection
               </a>
-              <a href="#story" className="px-10 py-4 text-base border-2 border-white text-white font-bold rounded-full bg-white/15 backdrop-blur-sm hover:bg-white hover:text-[#1C1C1C] transition-all inline-flex items-center justify-center">
+              <a href="#story" className="px-10 py-4 text-base font-bold rounded-full bg-white text-[#1C1C1C] hover:bg-[#FFF6E1] transition-all inline-flex items-center justify-center shadow-lg">
                 Our Story
               </a>
             </div>
@@ -684,7 +688,7 @@ export default function Home() {
         {/* Floating product strip overlapping hero bottom */}
         <div className="relative z-20 -mt-20 px-4 sm:px-6">
           <div className="max-w-5xl mx-auto">
-            <div className="grid grid-cols-4 gap-3 sm:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
               {[
                 { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg", name: "The Crewneck" },
                 { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg", name: "Do Not Disturb" },
@@ -735,7 +739,7 @@ export default function Home() {
             {pressLogos.map((logo, i) => (
               <span
                 key={i}
-                className="text-xl sm:text-2xl font-serif font-bold text-[#1C1C1C]/15 hover:text-[#1C1C1C]/40 transition-colors duration-300 tracking-tight cursor-default"
+                className="text-xl sm:text-2xl font-serif font-bold text-[#1C1C1C]/25 hover:text-[#1C1C1C]/45 transition-colors duration-300 tracking-tight cursor-default"
                 style={{ fontFamily: 'var(--font-eb-garamond), serif' }}
               >
                 {logo.display}
@@ -856,7 +860,7 @@ export default function Home() {
                   Premium materials. Thoughtful design. Effortless style.
                 </p>
               </div>
-              <div className="flex gap-10 mt-10">
+              <div className="flex flex-wrap gap-6 sm:gap-10 mt-10">
                 {[
                   { value: "15K+", label: "Happy Customers" },
                   { value: "4.9/5", label: "Average Rating" },
@@ -942,7 +946,7 @@ export default function Home() {
                   </button>
                 </div>
                 <div>
-                  <p className="text-[10px] text-[#1C1C1C]/30 font-semibold uppercase tracking-wider mb-1">{product.category}</p>
+                  <p className="text-[10px] text-[#1C1C1C]/50 font-semibold uppercase tracking-wider mb-1">{product.category}</p>
                   <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:text-[#334FB4] transition-colors">
                     <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
                       {product.name}
@@ -998,7 +1002,7 @@ export default function Home() {
 
           {/* Mobile carousel */}
           <div className="sm:hidden">
-            <div className="relative overflow-hidden">
+            <div className="relative overflow-hidden min-h-[260px]">
               {testimonials.map((review, i) => (
                 <div
                   key={i}
@@ -1032,10 +1036,11 @@ export default function Home() {
                 <button
                   key={i}
                   onClick={() => setActiveReview(i)}
-                  className={`rounded-full transition-all duration-300 ${
+                  aria-label={`Go to review ${i + 1}`}
+                  className={`rounded-full transition-all duration-300 p-2 ${
                     activeReview === i
-                      ? 'w-6 h-2 bg-[#334FB4]'
-                      : 'w-2 h-2 bg-[#1C1C1C]/15 hover:bg-[#1C1C1C]/30'
+                      ? 'w-8 h-4 bg-[#334FB4]'
+                      : 'w-4 h-4 bg-[#1C1C1C]/15 hover:bg-[#1C1C1C]/30'
                   }`}
                 />
               ))}
@@ -1083,15 +1088,22 @@ export default function Home() {
                 Because Champagne is a Morning Drink.
               </p>
               <div className="flex gap-3">
-                {['instagram', 'tiktok', 'twitter'].map((social) => (
+                {[
+                  { name: 'instagram', url: 'https://instagram.com/hotelbreakfast' },
+                  { name: 'tiktok', url: 'https://tiktok.com/@hotelbreakfast' },
+                  { name: 'twitter', url: 'https://twitter.com/hotelbreakfast' },
+                ].map((social) => (
                   <a
-                    key={social}
-                    href="#"
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.name}
                     className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/40 hover:bg-white/20 hover:text-white transition-all"
                   >
-                    {social === 'instagram' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/><circle cx="12" cy="12" r="3.5"/></svg>}
-                    {social === 'tiktok' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>}
-                    {social === 'twitter' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>}
+                    {social.name === 'instagram' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/><circle cx="12" cy="12" r="3.5"/></svg>}
+                    {social.name === 'tiktok' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>}
+                    {social.name === 'twitter' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>}
                   </a>
                 ))}
               </div>
@@ -1132,7 +1144,7 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-white/10 gap-4">
-            <p className="text-white/25 text-xs">
+            <p className="text-white/40 text-xs">
               &copy; {new Date().getFullYear()} Hotel Breakfast. All rights reserved.
             </p>
             <div className="flex items-center gap-3">

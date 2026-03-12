@@ -465,13 +465,13 @@ export default function Home() {
       )}
 
       {/* Announcement Bar — Rotating */}
-      <div className="bg-[#1C1C1C] text-white text-center py-2.5 px-4 text-xs font-semibold tracking-wider relative overflow-hidden">
+      <div className="bg-[#334FB4] text-white text-center py-2.5 px-4 text-xs font-semibold tracking-wider relative overflow-hidden">
         <div
           key={announcementIndex}
           className="animate-fade-in"
         >
           {announcements[announcementIndex]}
-          <span className="mx-3 text-[#E8C547]">/</span>
+          <span className="mx-3 text-[#E8C547]/70">/</span>
           <a href="#shop" className="underline hover:no-underline">Shop Now</a>
         </div>
       </div>
@@ -513,7 +513,7 @@ export default function Home() {
                   <Link
                     key={item.label}
                     href={item.href}
-                    className="text-sm text-[#1C1C1C]/70 hover:text-[#1C1C1C] transition-colors font-medium"
+                    className="text-sm text-[#1C1C1C]/70 hover:text-[#334FB4] transition-colors font-medium"
                   >
                     {item.label}
                   </Link>
@@ -521,7 +521,7 @@ export default function Home() {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="text-sm text-[#1C1C1C]/70 hover:text-[#1C1C1C] transition-colors font-medium"
+                    className="text-sm text-[#1C1C1C]/70 hover:text-[#334FB4] transition-colors font-medium"
                   >
                     {item.label}
                   </a>
@@ -596,58 +596,92 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section — Large Image, Centered Copy */}
-      <section className="relative overflow-hidden">
-        <div className="relative min-h-[85vh] flex items-center justify-center">
-          {/* Background Image */}
-          <div className="absolute inset-0">
-            <Image
-              src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920"
-              alt="Hotel poolside morning"
-              fill
-              priority
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-[#1C1C1C]/40" />
-          </div>
-
-          {/* Content */}
-          <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-            <p className="font-[family-name:var(--font-eb-garamond)] italic text-white/80 text-lg sm:text-xl mb-4">
-              Leisure-Enhancing Essentials
-            </p>
-            <h1 className="font-[family-name:var(--font-eb-garamond)] text-4xl sm:text-6xl lg:text-7xl text-white leading-[1.05] mb-6">
-              Because Champagne<br />
-              <em>is a Morning Drink</em>
-            </h1>
-            <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-              Lifestyle essentials for those who believe every morning should feel like the first day of vacation.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
-                Shop the Collection
-              </a>
-              <a href="#story" className="btn-outline px-10 py-4 text-base border-white text-white hover:bg-white hover:text-[#1C1C1C] inline-flex items-center justify-center">
-                Our Story
-              </a>
+      {/* Hero Section — Product-Forward with Cream Overlay */}
+      <section className="relative overflow-hidden bg-[#FFF6E1]">
+        <div className="relative min-h-[85vh] flex items-center">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 w-full">
+            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              {/* Copy */}
+              <div className="py-16 sm:py-20 lg:py-0">
+                <p className="font-[family-name:var(--font-eb-garamond)] italic text-[#334FB4] text-lg sm:text-xl mb-4">
+                  Leisure-Enhancing Essentials
+                </p>
+                <h1 className="font-[family-name:var(--font-eb-garamond)] text-4xl sm:text-6xl lg:text-7xl text-[#1C1C1C] leading-[1.05] mb-6">
+                  Because Champagne<br />
+                  <em>is a Morning Drink</em>
+                </h1>
+                <p className="text-[#1C1C1C]/60 text-base sm:text-lg max-w-xl mb-10 leading-relaxed">
+                  Lifestyle essentials for those who believe every morning should feel like the first day of vacation.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
+                    Shop the Collection
+                  </a>
+                  <a href="#story" className="btn-outline px-10 py-4 text-base inline-flex items-center justify-center">
+                    Our Story
+                  </a>
+                </div>
+              </div>
+              {/* Product Images Grid */}
+              <div className="grid grid-cols-2 gap-3 pb-8 lg:pb-0">
+                <div className="aspect-[3/4] rounded-xl overflow-hidden relative">
+                  <Image
+                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg"
+                    alt="The Crewneck Pullover"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+                <div className="aspect-[3/4] rounded-xl overflow-hidden relative mt-8">
+                  <Image
+                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg"
+                    alt="Do Not Disturb Oversized Tee"
+                    fill
+                    priority
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+                <div className="aspect-[3/4] rounded-xl overflow-hidden relative -mt-8">
+                  <Image
+                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg"
+                    alt="The Lounge Towel"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+                <div className="aspect-[3/4] rounded-xl overflow-hidden relative">
+                  <Image
+                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5580959199368031222_2048.jpg"
+                    alt="The Denim Dad Hat"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Social Proof Bar */}
-      <section className="py-3 bg-[#F5F1EB] overflow-hidden">
-        <div className="animate-marquee whitespace-nowrap flex">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex items-center gap-10 mx-10">
-              {['4.9 / 5 RATING', '2,000+ REVIEWS', 'FREE SHIPPING $75+', 'SUSTAINABLE MATERIALS', '30-DAY RETURNS'].map((text, j) => (
-                <span key={j} className="text-[#1C1C1C]/40 text-xs font-semibold tracking-widest flex items-center gap-5">
-                  {text}
-                  <span className="text-[#E8C547]">/</span>
-                </span>
-              ))}
-            </div>
-          ))}
+      {/* Prominent Review Bar */}
+      <section className="py-5 bg-white border-y border-black/5">
+        <div className="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8">
+          <div className="flex items-center gap-2">
+            <span className="text-[#E8C547] text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+            <span className="font-bold text-[#1C1C1C] text-lg">4.9/5</span>
+          </div>
+          <span className="text-[#1C1C1C]/40 text-sm font-medium">from 2,000+ verified reviews</span>
+          <div className="hidden sm:flex items-center gap-6 text-xs text-[#1C1C1C]/40 font-semibold tracking-wider">
+            <span className="text-[#334FB4]">/</span>
+            <span>FREE SHIPPING $75+</span>
+            <span className="text-[#334FB4]">/</span>
+            <span>30-DAY RETURNS</span>
+          </div>
         </div>
       </section>
 
@@ -674,7 +708,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
-              <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-2">Fan Favorites</p>
+              <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">Fan Favorites</p>
               <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C]">
                 Bestsellers
               </h2>
@@ -708,7 +742,7 @@ export default function Home() {
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className="absolute bottom-3 right-3 w-10 h-10 bg-white text-[#1C1C1C] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:bg-[#E8C547]"
+                    className="absolute bottom-3 right-3 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
@@ -716,7 +750,7 @@ export default function Home() {
                   </button>
                 </div>
                 <div>
-                  <h3 className="font-medium text-sm text-[#1C1C1C] mb-1 group-hover:underline">
+                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:underline">
                     <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
                       {product.name}
                     </Link>
@@ -730,7 +764,7 @@ export default function Home() {
       </section>
 
       {/* Story Section */}
-      <section id="story" className="py-20 sm:py-28 px-4 sm:px-6 bg-[#F5F1EB]">
+      <section id="story" className="py-20 sm:py-28 px-4 sm:px-6 bg-[#FFF6E1]">
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Images */}
@@ -757,7 +791,7 @@ export default function Home() {
 
             {/* Copy */}
             <div>
-              <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-3">Our Story</p>
+              <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-3">Our Story</p>
               <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-8 leading-tight">
                 We Started With<br />
                 <em>a Simple Belief</em>
@@ -794,7 +828,7 @@ export default function Home() {
       <section id="shop" className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-2">The Collection</p>
+            <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">The Collection</p>
             <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-4">
               Shop All
             </h2>
@@ -844,7 +878,7 @@ export default function Home() {
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className="absolute bottom-3 right-3 w-10 h-10 bg-white text-[#1C1C1C] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:bg-[#E8C547]"
+                    className="absolute bottom-3 right-3 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
@@ -853,7 +887,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-[10px] text-[#1C1C1C]/30 font-semibold uppercase tracking-wider mb-1">{product.category}</p>
-                  <h3 className="font-medium text-sm text-[#1C1C1C] mb-1 group-hover:underline">
+                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:underline">
                     <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
                       {product.name}
                     </Link>
@@ -867,10 +901,10 @@ export default function Home() {
       </section>
 
       {/* Reviews */}
-      <section className="py-20 sm:py-24 px-4 sm:px-6 bg-[#F5F1EB]">
+      <section className="py-20 sm:py-24 px-4 sm:px-6 bg-[#FFF6E1]">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-2">Reviews</p>
+            <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">Reviews</p>
             <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-3">
               What People Are Saying
             </h2>

@@ -268,11 +268,29 @@ body {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
 }
 
-/* ===== HERO PARALLAX ===== */
+/* ===== HERO PARALLAX & SHIMMER ===== */
 
 .hero-image {
   transition: transform 0.1s linear;
   will-change: transform;
+}
+
+@keyframes hero-sparkle {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.hero-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.08) 35%,
+    rgba(232, 197, 71, 0.12) 42%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 65%
+  );
+  background-size: 200% 100%;
+  animation: hero-sparkle 6s ease-in-out infinite;
 }
 
 /* ===== FLOATING PRODUCT STRIP ===== */

@@ -235,12 +235,13 @@ const testimonials = [
   },
 ];
 
-const pressLogos = [
-  { name: "Vogue", display: "VOGUE" },
-  { name: "GQ", display: "GQ" },
-  { name: "Hypebeast", display: "HYPEBEAST" },
-  { name: "Highsnobiety", display: "HIGHSNOBIETY" },
-  { name: "Complex", display: "COMPLEX" },
+// Recent purchase notifications
+const recentPurchases = [
+  { name: "Sarah M.", location: "Los Angeles, CA", product: "The Crewneck Pullover", time: "2 min ago" },
+  { name: "Jake R.", location: "Austin, TX", product: "Do Not Disturb Tee", time: "5 min ago" },
+  { name: "Emma K.", location: "Brooklyn, NY", product: "The Lounge Towel", time: "8 min ago" },
+  { name: "Marcus T.", location: "Miami, FL", product: "The Denim Dad Hat", time: "12 min ago" },
+  { name: "Olivia P.", location: "San Diego, CA", product: "Terracotta Towel", time: "15 min ago" },
 ];
 
 interface Product {
@@ -321,6 +322,23 @@ export default function Home() {
       setActiveReview((prev) => (prev + 1) % testimonials.length);
     }, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  // Purchase notification popup
+  const [purchaseNotif, setPurchaseNotif] = useState<{ name: string; location: string; product: string; time: string } | null>(null);
+  const [notifVisible, setNotifVisible] = useState(false);
+
+  useEffect(() => {
+    let idx = 0;
+    const showNotif = () => {
+      setPurchaseNotif(recentPurchases[idx % recentPurchases.length]);
+      setNotifVisible(true);
+      setTimeout(() => setNotifVisible(false), 4000);
+      idx++;
+    };
+    const timeout = setTimeout(showNotif, 6000);
+    const interval = setInterval(showNotif, 15000);
+    return () => { clearTimeout(timeout); clearInterval(interval); };
   }, []);
 
   // Rotate announcements
@@ -660,6 +678,8 @@ export default function Home() {
               className="object-cover hero-image scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#1C1C1C]/50 via-[#1C1C1C]/30 to-[#1C1C1C]/60" />
+            {/* Shimmer sparkle overlay */}
+            <div className="absolute inset-0 hero-shimmer pointer-events-none" />
           </div>
 
           {/* Centered copy */}
@@ -728,24 +748,6 @@ export default function Home() {
               ))}
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* As Featured In */}
-      <section className="py-14 px-4 sm:px-6 bg-white border-b border-black/5">
-        <div className="max-w-5xl mx-auto">
-          <p className="reveal text-center text-[#1C1C1C]/30 text-xs font-semibold tracking-[0.2em] uppercase mb-8">As Featured In</p>
-          <div className="reveal flex flex-wrap items-center justify-center gap-8 sm:gap-14">
-            {pressLogos.map((logo, i) => (
-              <span
-                key={i}
-                className="text-xl sm:text-2xl font-serif font-bold text-[#1C1C1C]/25 hover:text-[#1C1C1C]/45 transition-colors duration-300 tracking-tight cursor-default"
-                style={{ fontFamily: 'var(--font-eb-garamond), serif' }}
-              >
-                {logo.display}
-              </span>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -849,7 +851,7 @@ export default function Home() {
                 We Started With<br />
                 <em>a Simple Belief</em>
               </h2>
-              <div className="space-y-5 text-[#1C1C1C]/60 text-base leading-relaxed">
+              <div className="space-y-5 text-[#1C1C1C]/75 text-base leading-relaxed">
                 <p>
                   <strong className="text-[#1C1C1C]">Every morning should feel like you&apos;re on vacation.</strong> That moment when you wake up in a beautiful hotel, sun streaming through the windows, nothing on the agenda but relaxation.
                 </p>
@@ -868,7 +870,7 @@ export default function Home() {
                 ].map((stat) => (
                   <div key={stat.label}>
                     <p className="text-2xl sm:text-3xl font-bold text-[#1C1C1C]">{stat.value}</p>
-                    <p className="text-[#1C1C1C]/40 text-xs mt-1 font-medium">{stat.label}</p>
+                    <p className="text-[#1C1C1C]/55 text-xs mt-1 font-medium">{stat.label}</p>
                   </div>
                 ))}
               </div>
@@ -1050,18 +1052,19 @@ export default function Home() {
       </section>
 
       {/* Value Props */}
-      <section className="py-16 px-4 sm:px-6 bg-white border-y border-black/5">
+      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-white border-y border-black/5">
         <div className="max-w-5xl mx-auto">
-          <div className="reveal grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 text-center">
+          <div className="reveal grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             {[
-              { title: "Sustainable", desc: "Organic & eco-friendly materials" },
-              { title: "Premium Quality", desc: "Built to last, made to impress" },
-              { title: "Free Shipping", desc: "On all orders over $75" },
-              { title: "Easy Returns", desc: "30-day money-back guarantee" },
+              { emoji: "🌿", title: "Sustainable", desc: "Organic & eco-friendly materials" },
+              { emoji: "✨", title: "Premium Quality", desc: "Built to last, made to impress" },
+              { emoji: "📦", title: "Free Shipping", desc: "On all orders over $75" },
+              { emoji: "↩️", title: "Easy Returns", desc: "30-day money-back guarantee" },
             ].map((item) => (
-              <div key={item.title}>
-                <h3 className="font-semibold text-[#1C1C1C] text-sm mb-1">{item.title}</h3>
-                <p className="text-[#1C1C1C]/40 text-xs">{item.desc}</p>
+              <div key={item.title} className="text-center p-5 sm:p-6 rounded-xl bg-[#FFF6E1]/50 hover:bg-[#FFF6E1] transition-colors">
+                <span className="text-3xl sm:text-4xl block mb-3">{item.emoji}</span>
+                <h3 className="font-bold text-[#1C1C1C] text-sm sm:text-base mb-1">{item.title}</h3>
+                <p className="text-[#1C1C1C]/55 text-xs sm:text-sm">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -1157,6 +1160,39 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Purchase Notification Popup */}
+      {purchaseNotif && (
+        <div
+          className={`fixed bottom-4 left-4 z-[100] max-w-xs transition-all duration-500 ${
+            notifVisible
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-4 pointer-events-none'
+          }`}
+        >
+          <div className="bg-white rounded-xl shadow-2xl border border-black/5 p-4 flex items-start gap-3">
+            <div className="w-2 h-2 rounded-full bg-[#3D6B5E] mt-1.5 flex-shrink-0 animate-pulse" />
+            <div className="min-w-0">
+              <p className="text-sm text-[#1C1C1C] font-semibold leading-snug">
+                {purchaseNotif.name} <span className="font-normal text-[#1C1C1C]/50">in {purchaseNotif.location}</span>
+              </p>
+              <p className="text-xs text-[#1C1C1C]/70 mt-0.5">
+                just purchased <span className="font-semibold text-[#334FB4]">{purchaseNotif.product}</span>
+              </p>
+              <p className="text-[10px] text-[#1C1C1C]/35 mt-1">{purchaseNotif.time}</p>
+            </div>
+            <button
+              onClick={() => setNotifVisible(false)}
+              className="flex-shrink-0 text-[#1C1C1C]/30 hover:text-[#1C1C1C] transition-colors mt-0.5"
+              aria-label="Dismiss notification"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

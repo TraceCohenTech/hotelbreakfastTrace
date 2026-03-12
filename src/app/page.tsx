@@ -596,76 +596,66 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section — Product-Forward with Cream Overlay */}
-      <section className="relative overflow-hidden bg-[#FFF6E1]">
-        <div className="relative min-h-[85vh] flex items-center">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 w-full">
-            <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-              {/* Copy */}
-              <div className="py-16 sm:py-20 lg:py-0">
-                <p className="font-[family-name:var(--font-eb-garamond)] italic text-[#334FB4] text-lg sm:text-xl mb-4">
-                  Leisure-Enhancing Essentials
-                </p>
-                <h1 className="font-[family-name:var(--font-eb-garamond)] text-4xl sm:text-6xl lg:text-7xl text-[#1C1C1C] leading-[1.05] mb-6">
-                  Because Champagne<br />
-                  <em>is a Morning Drink</em>
-                </h1>
-                <p className="text-[#1C1C1C]/60 text-base sm:text-lg max-w-xl mb-10 leading-relaxed">
-                  Lifestyle essentials for those who believe every morning should feel like the first day of vacation.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
-                    Shop the Collection
-                  </a>
-                  <a href="#story" className="btn-outline px-10 py-4 text-base inline-flex items-center justify-center">
-                    Our Story
-                  </a>
-                </div>
-              </div>
-              {/* Product Images Grid */}
-              <div className="grid grid-cols-2 gap-3 pb-8 lg:pb-0">
-                <div className="aspect-[3/4] rounded-xl overflow-hidden relative">
-                  <Image
-                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg"
-                    alt="The Crewneck Pullover"
-                    fill
-                    priority
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </div>
-                <div className="aspect-[3/4] rounded-xl overflow-hidden relative mt-8">
-                  <Image
-                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg"
-                    alt="Do Not Disturb Oversized Tee"
-                    fill
-                    priority
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </div>
-                <div className="aspect-[3/4] rounded-xl overflow-hidden relative -mt-8">
-                  <Image
-                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg"
-                    alt="The Lounge Towel"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </div>
-                <div className="aspect-[3/4] rounded-xl overflow-hidden relative">
-                  <Image
-                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5580959199368031222_2048.jpg"
-                    alt="The Denim Dad Hat"
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </div>
-              </div>
+      {/* Hero Section — Big Image with Floating Product Strip */}
+      <section className="relative overflow-hidden">
+        {/* Full-bleed hero image */}
+        <div className="relative min-h-[90vh] flex items-center justify-center">
+          <div className="absolute inset-0">
+            <Image
+              src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920"
+              alt="Hotel poolside morning"
+              fill
+              priority
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#1C1C1C]/50 via-[#1C1C1C]/30 to-[#1C1C1C]/60" />
+          </div>
+
+          {/* Centered copy */}
+          <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
+            <p className="font-[family-name:var(--font-eb-garamond)] italic text-[#E8C547] text-lg sm:text-xl mb-4 drop-shadow-sm">
+              Leisure-Enhancing Essentials
+            </p>
+            <h1 className="font-[family-name:var(--font-eb-garamond)] text-5xl sm:text-7xl lg:text-8xl text-white leading-[1.02] mb-6 drop-shadow-md">
+              Because Champagne<br />
+              <em>is a Morning Drink</em>
+            </h1>
+            <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+              Lifestyle essentials for those who believe every morning should feel like the first day of vacation.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
+                Shop the Collection
+              </a>
+              <a href="#story" className="btn-outline px-10 py-4 text-base border-white text-white hover:bg-white hover:text-[#1C1C1C] inline-flex items-center justify-center">
+                Our Story
+              </a>
             </div>
           </div>
         </div>
+
+        {/* Floating product strip overlapping hero bottom */}
+        <div className="relative z-20 -mt-20 px-4 sm:px-6">
+          <div className="max-w-5xl mx-auto">
+            <div className="grid grid-cols-4 gap-3 sm:gap-4">
+              {[
+                { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg", name: "The Crewneck" },
+                { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg", name: "Do Not Disturb" },
+                { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg", name: "The Lounge Towel" },
+                { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5580959199368031222_2048.jpg", name: "The Denim Dad Hat" },
+              ].map((item) => (
+                <a key={item.name} href="#shop" className="group relative aspect-square rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 hover:ring-[#E8C547] transition-all hover:scale-[1.03]">
+                  <Image src={item.img} alt={item.name} fill className="object-cover" sizes="(max-width: 768px) 25vw, 15vw" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <span className="absolute bottom-2 left-2 right-2 text-white text-[10px] sm:text-xs font-bold truncate drop-shadow-md">
+                    {item.name}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="h-10 bg-[#FFFDF8]" />
       </section>
 
       {/* Prominent Review Bar */}

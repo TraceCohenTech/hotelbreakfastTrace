@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
@@ -276,6 +276,53 @@ export default function Home() {
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
 
+  // Review carousel state
+  const [activeReview, setActiveReview] = useState(0);
+
+  // Hero parallax
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-triggered reveal observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach((el) => {
+      observer.observe(el);
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  // Hero parallax on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (heroRef.current) {
+        const scrollY = window.scrollY;
+        const heroImg = heroRef.current.querySelector('.hero-image') as HTMLElement;
+        if (heroImg && scrollY < window.innerHeight) {
+          heroImg.style.transform = `scale(1.05) translateY(${scrollY * 0.15}px)`;
+        }
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Auto-rotate reviews
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveReview((prev) => (prev + 1) % testimonials.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   // Rotate announcements
   useEffect(() => {
     const interval = setInterval(() => {
@@ -513,7 +560,7 @@ export default function Home() {
                   <Link
                     key={item.label}
                     href={item.href}
-                    className="text-sm text-[#1C1C1C]/70 hover:text-[#334FB4] transition-colors font-medium"
+                    className="nav-link text-sm text-[#1C1C1C]/70 hover:text-[#334FB4] transition-colors font-medium"
                   >
                     {item.label}
                   </Link>
@@ -521,7 +568,7 @@ export default function Home() {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="text-sm text-[#1C1C1C]/70 hover:text-[#334FB4] transition-colors font-medium"
+                    className="nav-link text-sm text-[#1C1C1C]/70 hover:text-[#334FB4] transition-colors font-medium"
                   >
                     {item.label}
                   </a>
@@ -597,33 +644,33 @@ export default function Home() {
       </nav>
 
       {/* Hero Section — Big Image with Floating Product Strip */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden" ref={heroRef}>
         {/* Full-bleed hero image */}
         <div className="relative min-h-[90vh] flex items-center justify-center">
-          <div className="absolute inset-0">
+          <div className="absolute inset-0 overflow-hidden">
             <Image
               src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920"
               alt="Hotel poolside morning"
               fill
               priority
-              className="object-cover"
+              className="object-cover hero-image scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-[#1C1C1C]/50 via-[#1C1C1C]/30 to-[#1C1C1C]/60" />
           </div>
 
           {/* Centered copy */}
           <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
-            <p className="font-[family-name:var(--font-eb-garamond)] italic text-[#E8C547] text-lg sm:text-xl mb-4 drop-shadow-sm">
+            <p className="font-[family-name:var(--font-eb-garamond)] italic text-[#E8C547] text-lg sm:text-xl mb-4 drop-shadow-sm animate-fade-in-up opacity-0 stagger-1">
               Leisure-Enhancing Essentials
             </p>
-            <h1 className="font-[family-name:var(--font-eb-garamond)] text-5xl sm:text-7xl lg:text-8xl text-white leading-[1.02] mb-6 drop-shadow-md">
+            <h1 className="font-[family-name:var(--font-eb-garamond)] text-5xl sm:text-7xl lg:text-8xl text-white leading-[1.02] mb-6 drop-shadow-md animate-fade-in-up opacity-0 stagger-2">
               Because Champagne<br />
               <em>is a Morning Drink</em>
             </h1>
-            <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+            <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed animate-fade-in-up opacity-0 stagger-3">
               Lifestyle essentials for those who believe every morning should feel like the first day of vacation.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up opacity-0 stagger-4">
               <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
                 Shop the Collection
               </a>
@@ -643,8 +690,8 @@ export default function Home() {
                 { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg", name: "Do Not Disturb" },
                 { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg", name: "The Lounge Towel" },
                 { img: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5580959199368031222_2048.jpg", name: "The Denim Dad Hat" },
-              ].map((item) => (
-                <a key={item.name} href="#shop" className="group relative aspect-square rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 hover:ring-[#E8C547] transition-all hover:scale-[1.03]">
+              ].map((item, idx) => (
+                <a key={item.name} href="#shop" className={`product-strip-item group relative aspect-square rounded-xl overflow-hidden shadow-xl ring-2 ring-white/20 hover:ring-[#E8C547] transition-all animate-fade-in-up opacity-0 stagger-${idx + 2}`}>
                   <Image src={item.img} alt={item.name} fill className="object-cover" sizes="(max-width: 768px) 25vw, 15vw" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <span className="absolute bottom-2 left-2 right-2 text-white text-[10px] sm:text-xs font-bold truncate drop-shadow-md">
@@ -658,28 +705,33 @@ export default function Home() {
         <div className="h-10 bg-[#FFFDF8]" />
       </section>
 
-      {/* Prominent Review Bar */}
-      <section className="py-5 bg-white border-y border-black/5">
-        <div className="max-w-4xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8">
-          <div className="flex items-center gap-2">
-            <span className="text-[#E8C547] text-xl">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <span className="font-bold text-[#1C1C1C] text-lg">4.9/5</span>
-          </div>
-          <span className="text-[#1C1C1C]/40 text-sm font-medium">from 2,000+ verified reviews</span>
-          <div className="hidden sm:flex items-center gap-6 text-xs text-[#1C1C1C]/40 font-semibold tracking-wider">
-            <span className="text-[#334FB4]">/</span>
-            <span>FREE SHIPPING $75+</span>
-            <span className="text-[#334FB4]">/</span>
-            <span>30-DAY RETURNS</span>
-          </div>
+      {/* Scrolling Social Proof Marquee */}
+      <section className="py-4 bg-white border-y border-black/5 overflow-hidden">
+        <div className="animate-marquee whitespace-nowrap flex">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="flex items-center gap-8 mx-8">
+              {[
+                { icon: '★★★★★', text: '4.9/5 FROM 2,000+ REVIEWS' },
+                { icon: '◆', text: 'FREE SHIPPING $75+' },
+                { icon: '◆', text: 'SUSTAINABLE MATERIALS' },
+                { icon: '◆', text: '30-DAY RETURNS' },
+                { icon: '◆', text: 'PREMIUM QUALITY' },
+              ].map((item, j) => (
+                <span key={j} className="text-xs font-semibold tracking-widest flex items-center gap-3 text-[#1C1C1C]/40">
+                  <span className="text-[#E8C547]">{item.icon}</span>
+                  {item.text}
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
       </section>
 
       {/* As Featured In */}
       <section className="py-14 px-4 sm:px-6 bg-white border-b border-black/5">
         <div className="max-w-5xl mx-auto">
-          <p className="text-center text-[#1C1C1C]/30 text-xs font-semibold tracking-[0.2em] uppercase mb-8">As Featured In</p>
-          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14">
+          <p className="reveal text-center text-[#1C1C1C]/30 text-xs font-semibold tracking-[0.2em] uppercase mb-8">As Featured In</p>
+          <div className="reveal flex flex-wrap items-center justify-center gap-8 sm:gap-14">
             {pressLogos.map((logo, i) => (
               <span
                 key={i}
@@ -696,7 +748,7 @@ export default function Home() {
       {/* Bestsellers */}
       <section id="bestsellers" className="py-20 sm:py-24 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
+          <div className="reveal flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
               <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">Fan Favorites</p>
               <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C]">
@@ -709,10 +761,11 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-            {featuredProducts.map((product) => (
+            {featuredProducts.map((product, idx) => (
               <div
                 key={product.id}
-                className="group product-card cursor-pointer"
+                className={`reveal group product-card cursor-pointer`}
+                style={{ transitionDelay: `${idx * 0.1}s` }}
                 onClick={() => openQuickView(product)}
               >
                 <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
@@ -720,11 +773,17 @@ export default function Home() {
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover product-image"
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
+                  {/* Quick View overlay */}
+                  <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
+                    <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
+                      Quick View
+                    </span>
+                  </div>
                   {product.tag && (
-                    <div className="absolute top-3 left-3">
+                    <div className="absolute top-3 left-3 z-10">
                       <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
                         {product.tag}
                       </span>
@@ -732,7 +791,7 @@ export default function Home() {
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className="absolute bottom-3 right-3 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
+                    className="add-btn absolute bottom-3 right-3 z-10 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
@@ -740,7 +799,7 @@ export default function Home() {
                   </button>
                 </div>
                 <div>
-                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:underline">
+                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:text-[#334FB4] transition-colors">
                     <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
                       {product.name}
                     </Link>
@@ -758,7 +817,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Images */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="reveal-left grid grid-cols-2 gap-4">
               <div className="aspect-[3/4] rounded-xl overflow-hidden relative">
                 <Image
                   src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/13733165656261452820_2048.jpg"
@@ -780,7 +839,7 @@ export default function Home() {
             </div>
 
             {/* Copy */}
-            <div>
+            <div className="reveal-right">
               <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-3">Our Story</p>
               <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-8 leading-tight">
                 We Started With<br />
@@ -817,7 +876,7 @@ export default function Home() {
       {/* Full Collection */}
       <section id="shop" className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
+          <div className="reveal text-center mb-12">
             <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">The Collection</p>
             <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-4">
               Shop All
@@ -845,10 +904,11 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product, idx) => (
               <div
                 key={product.id}
-                className="group product-card cursor-pointer"
+                className="reveal group product-card cursor-pointer"
+                style={{ transitionDelay: `${(idx % 4) * 0.08}s` }}
                 onClick={() => openQuickView(product)}
               >
                 <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
@@ -856,11 +916,17 @@ export default function Home() {
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover product-image"
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
+                  {/* Quick View overlay */}
+                  <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
+                    <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
+                      Quick View
+                    </span>
+                  </div>
                   {product.tag && (
-                    <div className="absolute top-3 left-3">
+                    <div className="absolute top-3 left-3 z-10">
                       <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
                         {product.tag}
                       </span>
@@ -868,7 +934,7 @@ export default function Home() {
                   )}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className="absolute bottom-3 right-3 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
+                    className="add-btn absolute bottom-3 right-3 z-10 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
@@ -877,7 +943,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-[10px] text-[#1C1C1C]/30 font-semibold uppercase tracking-wider mb-1">{product.category}</p>
-                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:underline">
+                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:text-[#334FB4] transition-colors">
                     <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
                       {product.name}
                     </Link>
@@ -893,7 +959,7 @@ export default function Home() {
       {/* Reviews */}
       <section className="py-20 sm:py-24 px-4 sm:px-6 bg-[#FFF6E1]">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
+          <div className="reveal text-center mb-14">
             <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">Reviews</p>
             <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-3">
               What People Are Saying
@@ -905,11 +971,13 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          {/* Desktop: grid, Mobile: carousel */}
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {testimonials.map((review, i) => (
               <div
                 key={i}
-                className="bg-white rounded-xl p-6 sm:p-7"
+                className="reveal review-card bg-white rounded-xl p-6 sm:p-7"
+                style={{ transitionDelay: `${i * 0.1}s` }}
               >
                 <div className="flex items-center gap-0.5 text-[#E8C547] mb-4">
                   {[...Array(review.rating)].map((_, j) => (
@@ -923,9 +991,55 @@ export default function Home() {
                   <p className="font-semibold text-[#1C1C1C] text-sm">{review.name}</p>
                   <p className="text-[#1C1C1C]/40 text-xs">{review.location}</p>
                 </div>
-                <p className="text-[#C4553A] text-xs font-semibold mt-3">{review.product}</p>
+                <p className="text-[#334FB4] text-xs font-semibold mt-3">{review.product}</p>
               </div>
             ))}
+          </div>
+
+          {/* Mobile carousel */}
+          <div className="sm:hidden">
+            <div className="relative overflow-hidden">
+              {testimonials.map((review, i) => (
+                <div
+                  key={i}
+                  className={`transition-all duration-500 ${
+                    activeReview === i
+                      ? 'opacity-100 translate-x-0'
+                      : 'opacity-0 absolute inset-0 translate-x-8'
+                  }`}
+                >
+                  <div className="review-card bg-white rounded-xl p-7">
+                    <div className="flex items-center gap-0.5 text-[#E8C547] mb-4">
+                      {[...Array(review.rating)].map((_, j) => (
+                        <span key={j} className="text-sm">&#9733;</span>
+                      ))}
+                    </div>
+                    <p className="text-[#1C1C1C] text-base mb-5 leading-relaxed">
+                      &quot;{review.quote}&quot;
+                    </p>
+                    <div>
+                      <p className="font-semibold text-[#1C1C1C] text-sm">{review.name}</p>
+                      <p className="text-[#1C1C1C]/40 text-xs">{review.location}</p>
+                    </div>
+                    <p className="text-[#334FB4] text-xs font-semibold mt-3">{review.product}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Dot indicators */}
+            <div className="flex items-center justify-center gap-2 mt-6">
+              {testimonials.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveReview(i)}
+                  className={`rounded-full transition-all duration-300 ${
+                    activeReview === i
+                      ? 'w-6 h-2 bg-[#334FB4]'
+                      : 'w-2 h-2 bg-[#1C1C1C]/15 hover:bg-[#1C1C1C]/30'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -933,7 +1047,7 @@ export default function Home() {
       {/* Value Props */}
       <section className="py-16 px-4 sm:px-6 bg-white border-y border-black/5">
         <div className="max-w-5xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 text-center">
+          <div className="reveal grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 text-center">
             {[
               { title: "Sustainable", desc: "Organic & eco-friendly materials" },
               { title: "Premium Quality", desc: "Built to last, made to impress" },

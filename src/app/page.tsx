@@ -674,7 +674,7 @@ export default function Home() {
               <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
                 Shop the Collection
               </a>
-              <a href="#story" className="btn-outline px-10 py-4 text-base border-white text-white hover:bg-white hover:text-[#1C1C1C] inline-flex items-center justify-center">
+              <a href="#story" className="px-10 py-4 text-base border-2 border-white text-white font-bold rounded-full bg-white/15 backdrop-blur-sm hover:bg-white hover:text-[#1C1C1C] transition-all inline-flex items-center justify-center">
                 Our Story
               </a>
             </div>

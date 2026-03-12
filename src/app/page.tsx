@@ -15,6 +15,7 @@ const products = [
     description: "Cotton-rich fabric sweatshirt with vintage wash and retro vibe. Your new Sunday morning essential.",
     price: 76,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg",
+    image2: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg",
     tag: "Bestseller",
     category: "Apparel",
     sizes: ["S", "M", "L", "XL"],
@@ -32,6 +33,7 @@ const products = [
     description: "Ring-spun cotton fabric unisex shirt with vintage aesthetic and pocket detail.",
     price: 42,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1591691027165322782_2048.jpg",
+    image2: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/13733165656261452820_2048.jpg",
     tag: "Essential",
     category: "Apparel",
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
@@ -251,6 +253,7 @@ interface Product {
   description: string;
   price: number;
   image: string;
+  image2?: string;
   tag: string;
   category: string;
   sizes: string[];
@@ -328,6 +331,17 @@ export default function Home() {
   const [purchaseNotif, setPurchaseNotif] = useState<{ name: string; location: string; product: string; time: string } | null>(null);
   const [notifVisible, setNotifVisible] = useState(false);
 
+  // Back to top
+  const [showBackToTop, setShowBackToTop] = useState(false);
+
+  // Confetti on add to cart
+  const [confettiParticles, setConfettiParticles] = useState<{ id: number; x: number; y: number; color: string; delay: number }[]>([]);
+
+  // Counting stats
+  const [statsVisible, setStatsVisible] = useState(false);
+  const [countedStats, setCountedStats] = useState({ customers: 0, rating: 0, countries: 0 });
+  const statsRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     let idx = 0;
     const showNotif = () => {
@@ -340,6 +354,85 @@ export default function Home() {
     const interval = setInterval(showNotif, 15000);
     return () => { clearTimeout(timeout); clearInterval(interval); };
   }, []);
+
+  // Back to top visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 600);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Counting stats animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !statsVisible) {
+          setStatsVisible(true);
+          // Animate counting up
+          const duration = 2000;
+          const steps = 60;
+          const interval = duration / steps;
+          let step = 0;
+          const timer = setInterval(() => {
+            step++;
+            const progress = step / steps;
+            const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+            setCountedStats({
+              customers: Math.round(15000 * eased),
+              rating: Math.round(49 * eased) / 10,
+              countries: Math.round(50 * eased),
+            });
+            if (step >= steps) clearInterval(timer);
+          }, interval);
+        }
+      },
+      { threshold: 0.3 }
+    );
+    if (statsRef.current) observer.observe(statsRef.current);
+    return () => observer.disconnect();
+  }, [statsVisible]);
+
+  // 3D tilt handler for product cards
+  const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = ((y - centerY) / centerY) * -8;
+    const rotateY = ((x - centerX) / centerX) * 8;
+    const inner = card.querySelector('.tilt-inner') as HTMLElement;
+    if (inner) {
+      inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    }
+  };
+
+  const handleTiltReset = (e: React.MouseEvent<HTMLDivElement>) => {
+    const inner = e.currentTarget.querySelector('.tilt-inner') as HTMLElement;
+    if (inner) {
+      inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+    }
+  };
+
+  // Confetti burst
+  const triggerConfetti = (e: React.MouseEvent) => {
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = rect.left + rect.width / 2;
+    const y = rect.top;
+    const colors = ['#E8C547', '#334FB4', '#C4553A', '#3D6B5E', '#FFF6E1'];
+    const particles = Array.from({ length: 12 }, (_, i) => ({
+      id: Date.now() + i,
+      x: x + (Math.random() - 0.5) * 80,
+      y: y + (Math.random() - 0.5) * 40,
+      color: colors[i % colors.length],
+      delay: Math.random() * 0.3,
+    }));
+    setConfettiParticles(particles);
+    setTimeout(() => setConfettiParticles([]), 1200);
+  };
 
   // Rotate announcements
   useEffect(() => {
@@ -388,10 +481,12 @@ export default function Home() {
     ? products
     : products.filter(p => p.category === activeCategory);
 
-  const addToCart = useCallback((product?: Product, size?: string, color?: string, variantOverride?: string) => {
+  const addToCart = useCallback((product?: Product, size?: string, color?: string, variantOverride?: string, e?: React.MouseEvent) => {
     const variantId = variantOverride || product?.variantId;
     if (variantId && isConfigured) {
       addItem(variantId, 1, product?.name);
+      // Trigger confetti
+      if (e) triggerConfetti(e);
     } else if (!isConfigured) {
       openCart();
     }
@@ -687,9 +782,9 @@ export default function Home() {
             <p className="font-[family-name:var(--font-eb-garamond)] italic text-[#E8C547] text-lg sm:text-xl mb-4 drop-shadow-sm animate-fade-in-up opacity-0 stagger-1">
               Leisure-Enhancing Essentials
             </p>
-            <h1 className="font-[family-name:var(--font-eb-garamond)] text-5xl sm:text-7xl lg:text-8xl text-white leading-[1.02] mb-6 drop-shadow-md animate-fade-in-up opacity-0 stagger-2">
-              Because Champagne<br />
-              <em>is a Morning Drink</em>
+            <h1 className="font-[family-name:var(--font-eb-garamond)] text-5xl sm:text-7xl lg:text-8xl leading-[1.02] mb-6 drop-shadow-md animate-fade-in-up opacity-0 stagger-2">
+              <span className="gradient-text">Because Champagne</span><br />
+              <em className="gradient-text">is a Morning Drink</em>
             </h1>
             <p className="text-white/80 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed animate-fade-in-up opacity-0 stagger-3">
               Lifestyle essentials for those who believe every morning should feel like the first day of vacation.
@@ -770,47 +865,59 @@ export default function Home() {
             {featuredProducts.map((product, idx) => (
               <div
                 key={product.id}
-                className={`reveal group product-card cursor-pointer`}
+                className="reveal group product-card tilt-card cursor-pointer"
                 style={{ transitionDelay: `${idx * 0.1}s` }}
                 onClick={() => openQuickView(product)}
+                onMouseMove={handleTilt}
+                onMouseLeave={handleTiltReset}
               >
-                <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover product-image"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                  {/* Quick View overlay */}
-                  <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
-                    <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
-                      Quick View
-                    </span>
-                  </div>
-                  {product.tag && (
-                    <div className="absolute top-3 left-3 z-10">
-                      <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
-                        {product.tag}
+                <div className="tilt-inner">
+                  <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover image-primary"
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                    />
+                    {product.image2 && (
+                      <Image
+                        src={product.image2}
+                        alt={`${product.name} alternate`}
+                        fill
+                        className="object-cover image-secondary"
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                      />
+                    )}
+                    <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
+                      <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
+                        Quick View
                       </span>
                     </div>
-                  )}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className="add-btn absolute bottom-3 right-3 z-10 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
-                    </svg>
-                  </button>
-                </div>
-                <div>
-                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:text-[#334FB4] transition-colors">
-                    <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
-                      {product.name}
-                    </Link>
-                  </h3>
-                  <p className="text-sm text-[#1C1C1C]/50">${product.price}</p>
+                    {product.tag && (
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
+                          {product.tag}
+                        </span>
+                      </div>
+                    )}
+                    <button
+                      onClick={(e) => { e.stopPropagation(); addToCart(product, undefined, undefined, undefined, e); }}
+                      className="add-btn absolute bottom-3 right-3 z-10 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:text-[#334FB4] transition-colors">
+                      <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
+                        {product.name}
+                      </Link>
+                    </h3>
+                    <p className="text-sm text-[#1C1C1C]/50">${product.price}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -862,14 +969,14 @@ export default function Home() {
                   Premium materials. Thoughtful design. Effortless style.
                 </p>
               </div>
-              <div className="flex flex-wrap gap-6 sm:gap-10 mt-10">
+              <div ref={statsRef} className="flex flex-wrap gap-6 sm:gap-10 mt-10">
                 {[
-                  { value: "15K+", label: "Happy Customers" },
-                  { value: "4.9/5", label: "Average Rating" },
-                  { value: "50+", label: "Countries" },
+                  { value: statsVisible ? `${(countedStats.customers / 1000).toFixed(countedStats.customers >= 15000 ? 0 : 1)}K+` : '0', label: "Happy Customers" },
+                  { value: statsVisible ? `${countedStats.rating.toFixed(1)}/5` : '0', label: "Average Rating" },
+                  { value: statsVisible ? `${countedStats.countries}+` : '0', label: "Countries" },
                 ].map((stat) => (
                   <div key={stat.label}>
-                    <p className="text-2xl sm:text-3xl font-bold text-[#1C1C1C]">{stat.value}</p>
+                    <p className="text-2xl sm:text-3xl font-bold text-[#1C1C1C] tabular-nums">{stat.value}</p>
                     <p className="text-[#1C1C1C]/55 text-xs mt-1 font-medium">{stat.label}</p>
                   </div>
                 ))}
@@ -879,8 +986,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Horizontal Product Filmstrip */}
+      <section className="py-10 bg-white overflow-hidden border-y border-black/5">
+        <p className="text-center text-[#1C1C1C]/30 text-xs font-semibold tracking-[0.2em] uppercase mb-6">Shop the Collection</p>
+        <div className="animate-filmstrip whitespace-nowrap flex">
+          {[...Array(2)].map((_, setIdx) => (
+            <div key={setIdx} className="flex gap-4 mx-2">
+              {products.map((product) => (
+                <a
+                  key={`${setIdx}-${product.id}`}
+                  href="#shop"
+                  className="relative w-40 h-40 sm:w-52 sm:h-52 flex-shrink-0 rounded-xl overflow-hidden group"
+                >
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover group-hover:scale-110 transition-transform duration-500"
+                    sizes="200px"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="absolute bottom-2 left-2 right-2 text-white text-xs font-bold truncate opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md">
+                    {product.name} — ${product.price}
+                  </span>
+                </a>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Full Collection */}
-      <section id="shop" className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
+      <section id="shop" className="wave-divider wave-divider-white py-20 sm:py-28 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="reveal text-center mb-12">
             <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">The Collection</p>
@@ -913,48 +1050,60 @@ export default function Home() {
             {filteredProducts.map((product, idx) => (
               <div
                 key={product.id}
-                className="reveal group product-card cursor-pointer"
+                className="reveal group product-card tilt-card cursor-pointer"
                 style={{ transitionDelay: `${(idx % 4) * 0.08}s` }}
                 onClick={() => openQuickView(product)}
+                onMouseMove={handleTilt}
+                onMouseLeave={handleTiltReset}
               >
-                <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-cover product-image"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  />
-                  {/* Quick View overlay */}
-                  <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
-                    <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
-                      Quick View
-                    </span>
-                  </div>
-                  {product.tag && (
-                    <div className="absolute top-3 left-3 z-10">
-                      <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
-                        {product.tag}
+                <div className="tilt-inner">
+                  <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover image-primary"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    />
+                    {product.image2 && (
+                      <Image
+                        src={product.image2}
+                        alt={`${product.name} alternate`}
+                        fill
+                        className="object-cover image-secondary"
+                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      />
+                    )}
+                    <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
+                      <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
+                        Quick View
                       </span>
                     </div>
-                  )}
-                  <button
-                    onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className="add-btn absolute bottom-3 right-3 z-10 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
-                  >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
-                    </svg>
-                  </button>
-                </div>
-                <div>
-                  <p className="text-[10px] text-[#1C1C1C]/50 font-semibold uppercase tracking-wider mb-1">{product.category}</p>
-                  <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:text-[#334FB4] transition-colors">
-                    <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
-                      {product.name}
-                    </Link>
-                  </h3>
-                  <p className="text-sm text-[#1C1C1C]/50">${product.price}</p>
+                    {product.tag && (
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
+                          {product.tag}
+                        </span>
+                      </div>
+                    )}
+                    <button
+                      onClick={(e) => { e.stopPropagation(); addToCart(product, undefined, undefined, undefined, e); }}
+                      className="add-btn absolute bottom-3 right-3 z-10 w-10 h-10 bg-[#E8C547] text-[#1C1C1C] rounded-full flex items-center justify-center shadow-lg hover:bg-[#D4B03E] transition-all"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-[#1C1C1C]/50 font-semibold uppercase tracking-wider mb-1">{product.category}</p>
+                    <h3 className="font-bold text-sm text-[#1C1C1C] mb-1 group-hover:text-[#334FB4] transition-colors">
+                      <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
+                        {product.name}
+                      </Link>
+                    </h3>
+                    <p className="text-sm text-[#1C1C1C]/50">${product.price}</p>
+                  </div>
                 </div>
               </div>
             ))}
@@ -963,7 +1112,7 @@ export default function Home() {
       </section>
 
       {/* Reviews */}
-      <section className="py-20 sm:py-24 px-4 sm:px-6 bg-[#FFF6E1]">
+      <section className="wave-divider wave-divider-cream py-20 sm:py-24 px-4 sm:px-6 bg-[#FFF6E1]">
         <div className="max-w-6xl mx-auto">
           <div className="reveal text-center mb-14">
             <p className="text-xs font-semibold text-[#334FB4] uppercase tracking-[0.15em] mb-2">Reviews</p>
@@ -1160,6 +1309,43 @@ export default function Home() {
           </div>
         </div>
       </footer>
+
+      {/* Sticky Mobile Shop Button */}
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-[90] p-3 bg-gradient-to-t from-[#FFFDF8] via-[#FFFDF8] to-transparent">
+        <a
+          href="#shop"
+          className="block w-full py-3.5 btn-golden text-center text-sm"
+        >
+          Shop the Collection
+        </a>
+      </div>
+
+      {/* Back to Top */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        aria-label="Back to top"
+        className={`back-to-top fixed bottom-20 sm:bottom-6 right-4 z-[80] w-11 h-11 rounded-full bg-[#1C1C1C] text-white shadow-lg flex items-center justify-center hover:bg-[#334FB4] transition-colors ${
+          showBackToTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+        }`}
+      >
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+        </svg>
+      </button>
+
+      {/* Confetti Particles */}
+      {confettiParticles.map((p) => (
+        <div
+          key={p.id}
+          className="confetti-piece fixed z-[500]"
+          style={{
+            left: p.x,
+            top: p.y,
+            backgroundColor: p.color,
+            animationDelay: `${p.delay}s`,
+          }}
+        />
+      ))}
 
       {/* Purchase Notification Popup */}
       {purchaseNotif && (

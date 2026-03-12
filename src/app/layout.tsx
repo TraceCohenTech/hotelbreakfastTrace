@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, EB_Garamond } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import { CartDrawer } from "@/lib/cart-drawer";
+import { CartToast } from "@/lib/cart-toast";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
   subsets: ["latin"],
+  style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
@@ -43,6 +45,33 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Hotel Breakfast',
+  url: 'https://hotelbreakfast.co',
+  logo: 'https://hotel-breakfast-redesign.vercel.app/logo-white.png',
+  sameAs: [
+    'https://instagram.com/hotelbreakfast',
+    'https://tiktok.com/@hotelbreakfast',
+  ],
+};
+
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Hotel Breakfast',
+  url: 'https://hotelbreakfast.co',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://hotelbreakfast.co/search?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -50,12 +79,23 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+      </head>
       <body
-        className={`${inter.variable} ${playfair.variable} antialiased bg-[#FFF6E1] text-[#1a1a1a]`}
+        className={`${inter.variable} ${ebGaramond.variable} antialiased`}
       >
         <CartProvider>
           {children}
           <CartDrawer />
+          <CartToast />
         </CartProvider>
       </body>
     </html>

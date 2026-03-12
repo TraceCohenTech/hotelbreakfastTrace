@@ -116,6 +116,68 @@ export async function getProducts(first = 50): Promise<ShopifyProduct[]> {
   return data.products.edges.map((edge) => edge.node);
 }
 
+// ─── Single Product Query ──────────────────────────────────────────
+
+const PRODUCT_BY_HANDLE_QUERY = `
+  query GetProductByHandle($handle: String!) {
+    productByHandle(handle: $handle) {
+      id
+      title
+      description
+      handle
+      productType
+      tags
+      images(first: 5) {
+        edges {
+          node {
+            url
+            altText
+            width
+            height
+          }
+        }
+      }
+      variants(first: 10) {
+        edges {
+          node {
+            id
+            title
+            availableForSale
+            price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
+              amount
+              currencyCode
+            }
+            selectedOptions {
+              name
+              value
+            }
+          }
+        }
+      }
+      options {
+        name
+        values
+      }
+    }
+  }
+`;
+
+export async function getProductByHandle(handle: string): Promise<ShopifyProduct | null> {
+  try {
+    const data = await shopifyFetch<{
+      productByHandle: ShopifyProduct | null;
+    }>(PRODUCT_BY_HANDLE_QUERY, { handle });
+
+    return data.productByHandle;
+  } catch {
+    return null;
+  }
+}
+
 // ─── Cart Mutations ─────────────────────────────────────────────────
 
 const CREATE_CART_MUTATION = `

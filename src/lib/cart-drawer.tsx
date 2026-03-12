@@ -18,22 +18,22 @@ export function CartDrawer() {
     <>
       {/* Backdrop */}
       <div
-        className="fixed inset-0 z-[300] bg-black/60 backdrop-blur-sm animate-fade-in"
+        className="fixed inset-0 z-[300] bg-black/40 animate-fade-in"
         onClick={closeCart}
       />
 
       {/* Drawer */}
       <div className="fixed top-0 right-0 bottom-0 z-[301] w-full max-w-md bg-white shadow-2xl flex flex-col animate-slide-in-right">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-black/10">
-          <h2 className="text-xl font-black text-[#1a1a1a]">
+        <div className="flex items-center justify-between p-6 border-b border-black/5">
+          <h2 className="text-lg font-bold text-[#1C1C1C]">
             Your Cart {cart?.totalQuantity ? `(${cart.totalQuantity})` : ''}
           </h2>
           <button
             onClick={closeCart}
-            className="w-10 h-10 rounded-full hover:bg-[#FFF6E1] flex items-center justify-center transition-colors"
+            className="w-9 h-9 rounded-full hover:bg-[#F5F1EB] flex items-center justify-center transition-colors"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -43,10 +43,9 @@ export function CartDrawer() {
         {!isConfigured && (
           <div className="flex-1 flex items-center justify-center p-6">
             <div className="text-center">
-              <span className="text-5xl mb-4 block">🔧</span>
-              <p className="font-bold text-[#1a1a1a] mb-2">Shopify Not Connected</p>
-              <p className="text-[#1a1a1a]/60 text-sm">
-                Add your Storefront API token to <code className="bg-[#FFF6E1] px-2 py-0.5 rounded text-xs">.env.local</code> to enable the cart.
+              <p className="font-semibold text-[#1C1C1C] mb-2">Shopify Not Connected</p>
+              <p className="text-[#1C1C1C]/50 text-sm">
+                Add your Storefront API token to <code className="bg-[#F5F1EB] px-2 py-0.5 rounded text-xs">.env.local</code> to enable the cart.
               </p>
             </div>
           </div>
@@ -56,12 +55,11 @@ export function CartDrawer() {
         {isConfigured && lines.length === 0 && (
           <div className="flex-1 flex items-center justify-center p-6">
             <div className="text-center">
-              <span className="text-5xl mb-4 block">🛒</span>
-              <p className="font-bold text-[#1a1a1a] mb-2">Your cart is empty</p>
-              <p className="text-[#1a1a1a]/60 text-sm mb-6">Add some items to get started.</p>
+              <p className="font-semibold text-[#1C1C1C] mb-2">Your cart is empty</p>
+              <p className="text-[#1C1C1C]/50 text-sm mb-6">Add some items to get started.</p>
               <button
                 onClick={closeCart}
-                className="px-6 py-3 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white font-bold rounded-full"
+                className="px-6 py-3 btn-golden text-sm"
               >
                 Continue Shopping
               </button>
@@ -72,10 +70,10 @@ export function CartDrawer() {
         {/* Cart items */}
         {isConfigured && lines.length > 0 && (
           <>
-            <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            <div className="flex-1 overflow-y-auto p-6 space-y-5">
               {isLoading && (
                 <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
-                  <div className="w-8 h-8 border-3 border-[#334FB4] border-t-transparent rounded-full animate-spin" />
+                  <div className="w-6 h-6 border-2 border-[#1C1C1C] border-t-transparent rounded-full animate-spin" />
                 </div>
               )}
 
@@ -88,8 +86,7 @@ export function CartDrawer() {
 
                 return (
                   <div key={line.id} className="flex gap-4">
-                    {/* Item image */}
-                    <div className="relative w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-[#FFF6E1]">
+                    <div className="relative w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#F5F1EB]">
                       {image && (
                         <Image
                           src={image.url}
@@ -100,19 +97,17 @@ export function CartDrawer() {
                       )}
                     </div>
 
-                    {/* Item details */}
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-[#1a1a1a] text-sm truncate">
+                      <h3 className="font-semibold text-[#1C1C1C] text-sm truncate">
                         {line.merchandise.product.title}
                       </h3>
                       {options && (
-                        <p className="text-[#1a1a1a]/50 text-xs mt-0.5">{options}</p>
+                        <p className="text-[#1C1C1C]/40 text-xs mt-0.5">{options}</p>
                       )}
-                      <p className="font-black text-[#1a1a1a] mt-1">
+                      <p className="font-bold text-[#1C1C1C] text-sm mt-1">
                         ${parseFloat(line.merchandise.price.amount).toFixed(2)}
                       </p>
 
-                      {/* Quantity controls */}
                       <div className="flex items-center gap-3 mt-2">
                         <button
                           onClick={() => {
@@ -122,22 +117,22 @@ export function CartDrawer() {
                               updateItem(line.id, line.quantity - 1);
                             }
                           }}
-                          className="w-7 h-7 rounded-full bg-[#FFF6E1] flex items-center justify-center text-sm font-bold hover:bg-[#334FB4] hover:text-white transition-colors"
+                          className="w-7 h-7 rounded-full bg-[#F5F1EB] flex items-center justify-center text-xs font-bold hover:bg-[#1C1C1C] hover:text-white transition-colors"
                           disabled={isLoading}
                         >
                           -
                         </button>
-                        <span className="text-sm font-bold w-4 text-center">{line.quantity}</span>
+                        <span className="text-sm font-semibold w-4 text-center">{line.quantity}</span>
                         <button
                           onClick={() => updateItem(line.id, line.quantity + 1)}
-                          className="w-7 h-7 rounded-full bg-[#FFF6E1] flex items-center justify-center text-sm font-bold hover:bg-[#334FB4] hover:text-white transition-colors"
+                          className="w-7 h-7 rounded-full bg-[#F5F1EB] flex items-center justify-center text-xs font-bold hover:bg-[#1C1C1C] hover:text-white transition-colors"
                           disabled={isLoading}
                         >
                           +
                         </button>
                         <button
                           onClick={() => removeItem(line.id)}
-                          className="ml-auto text-[#1a1a1a]/30 hover:text-[#A42325] transition-colors"
+                          className="ml-auto text-[#1C1C1C]/25 hover:text-[#C4553A] transition-colors"
                           disabled={isLoading}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,46 +147,46 @@ export function CartDrawer() {
             </div>
 
             {/* Footer with checkout */}
-            <div className="border-t border-black/10 p-6 space-y-4">
+            <div className="border-t border-black/5 p-6 space-y-4">
               {/* Free shipping progress */}
               {subtotal < 75 && (
                 <div>
                   <div className="flex justify-between text-xs mb-1.5">
-                    <span className="text-[#1a1a1a]/60">
-                      Add <span className="font-bold text-[#334FB4]">${(75 - subtotal).toFixed(2)}</span> for free shipping
+                    <span className="text-[#1C1C1C]/50">
+                      Add <span className="font-bold text-[#1C1C1C]">${(75 - subtotal).toFixed(2)}</span> for free shipping
                     </span>
-                    <span className="text-[#1a1a1a]/40">${subtotal.toFixed(2)} / $75</span>
+                    <span className="text-[#1C1C1C]/30">${subtotal.toFixed(2)} / $75</span>
                   </div>
-                  <div className="h-2 bg-[#FFF6E1] rounded-full overflow-hidden">
+                  <div className="h-1.5 bg-[#F5F1EB] rounded-full overflow-hidden">
                     <div
-                      className="h-full bg-gradient-to-r from-[#334FB4] to-[#7A9E7E] rounded-full transition-all duration-500"
+                      className="h-full bg-[#E8C547] rounded-full transition-all duration-500"
                       style={{ width: `${Math.min((subtotal / 75) * 100, 100)}%` }}
                     />
                   </div>
                 </div>
               )}
               {subtotal >= 75 && (
-                <p className="text-center text-sm font-bold text-[#7A9E7E]">
-                  🎉 You qualify for free shipping!
+                <p className="text-center text-xs font-semibold text-[#3D6B5E]">
+                  You qualify for free shipping!
                 </p>
               )}
 
               <div className="flex justify-between items-center">
-                <span className="text-[#1a1a1a]/60">Subtotal</span>
-                <span className="text-xl font-black text-[#1a1a1a]">${subtotal.toFixed(2)}</span>
+                <span className="text-[#1C1C1C]/50 text-sm">Subtotal</span>
+                <span className="text-lg font-bold text-[#1C1C1C]">${subtotal.toFixed(2)}</span>
               </div>
-              <p className="text-xs text-[#1a1a1a]/40 text-center">
+              <p className="text-[10px] text-[#1C1C1C]/30 text-center">
                 Shipping & taxes calculated at checkout
               </p>
               <a
                 href={checkoutUrl || '#'}
-                className="block w-full py-4 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] text-center text-lg"
+                className="block w-full py-4 btn-golden text-center text-base"
               >
                 Checkout — ${subtotal.toFixed(2)}
               </a>
               <button
                 onClick={closeCart}
-                className="w-full py-3 text-[#334FB4] font-bold text-sm hover:text-[#1a1a1a] transition-colors"
+                className="w-full py-2 text-[#1C1C1C]/50 font-semibold text-sm hover:text-[#1C1C1C] transition-colors"
               >
                 Continue Shopping
               </button>

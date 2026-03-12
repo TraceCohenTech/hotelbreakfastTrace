@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useCart } from '@/lib/cart-context';
 import { getProducts, type ShopifyProduct } from '@/lib/shopify';
 
@@ -9,13 +10,13 @@ import { getProducts, type ShopifyProduct } from '@/lib/shopify';
 const products = [
   {
     id: 1,
+    handle: "the-crewneck-pullover",
     name: "The Crewneck Pullover",
     description: "Cotton-rich fabric sweatshirt with vintage wash and retro vibe. Your new Sunday morning essential.",
     price: 76,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg",
     tag: "Bestseller",
     category: "Apparel",
-    hoverColor: "hover-color-navy",
     sizes: ["S", "M", "L", "XL"],
     colors: [
       { name: "Navy", hex: "#334FB4" },
@@ -26,13 +27,13 @@ const products = [
   },
   {
     id: 2,
+    handle: "the-pocket-tee",
     name: "The Pocket Tee",
     description: "Ring-spun cotton fabric unisex shirt with vintage aesthetic and pocket detail.",
     price: 42,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1591691027165322782_2048.jpg",
     tag: "Essential",
     category: "Apparel",
-    hoverColor: "hover-color-coral",
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
     colors: [
       { name: "White", hex: "#FFFFFF" },
@@ -43,13 +44,13 @@ const products = [
   },
   {
     id: 3,
+    handle: "do-not-disturb-oversized-tee",
     name: "Do Not Disturb Oversized Tee",
     description: "Men's Heavy Oversized Tee combining casual elegance with trendy oversized fit.",
     price: 64.99,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg",
-    tag: "New Drop",
+    tag: "New",
     category: "Apparel",
-    hoverColor: "hover-color-burgundy",
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: [
       { name: "Black", hex: "#1a1a1a" },
@@ -59,13 +60,13 @@ const products = [
   },
   {
     id: 4,
+    handle: "breakfast-travel-oversized-tee",
     name: "Breakfast & Travel Oversized Tee",
     description: "Reflecting individuality and comfort with laid-back aesthetic. Made for wanderers.",
     price: 64.99,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/14932325304822957776_2048.jpg",
     tag: "Limited",
     category: "Apparel",
-    hoverColor: "hover-color-sage",
     sizes: ["S", "M", "L", "XL"],
     colors: [
       { name: "Cream", hex: "#FFF6E1" },
@@ -75,13 +76,13 @@ const products = [
   },
   {
     id: 5,
+    handle: "the-everyday-tote",
     name: "The Everyday Tote",
     description: "100% organic cotton twill bag with 6-gallon capacity. OEKO-TEX certified for conscious living.",
     price: 42,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/13733165656261452820_2048.jpg",
     tag: "Sustainable",
     category: "Accessories",
-    hoverColor: "hover-color-sage",
     sizes: ["One Size"],
     colors: [
       { name: "Natural", hex: "#F5E6C8" },
@@ -91,13 +92,13 @@ const products = [
   },
   {
     id: 6,
+    handle: "the-organic-cap",
     name: "The Organic Cap",
     description: "100% organic cotton baseball cap. Unstructured six-panel design for effortless style.",
     price: 35,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1875496474666638470_2048.jpg",
     tag: "Organic",
     category: "Accessories",
-    hoverColor: "hover-color-navy",
     sizes: ["One Size"],
     colors: [
       { name: "Navy", hex: "#334FB4" },
@@ -108,13 +109,13 @@ const products = [
   },
   {
     id: 7,
+    handle: "the-denim-dad-hat",
     name: "The Denim Dad Hat",
     description: "6-panel unstructured denim hat with pigment-dyed finish. Vintage vibes only.",
     price: 52,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5580959199368031222_2048.jpg",
     tag: "Fan Favorite",
     category: "Accessories",
-    hoverColor: "hover-color-coral",
     sizes: ["One Size"],
     colors: [
       { name: "Denim Blue", hex: "#6B8CAE" },
@@ -124,13 +125,13 @@ const products = [
   },
   {
     id: 8,
+    handle: "the-sun-hat",
     name: "The Sun Hat",
     description: "Premium bucket hat for beach, festivals, and outdoor adventures. Sun protection with style.",
     price: 35,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3163221279104308777_2048.jpg",
     tag: "Summer",
     category: "Accessories",
-    hoverColor: "hover-color-burgundy",
     sizes: ["S/M", "L/XL"],
     colors: [
       { name: "Natural", hex: "#F5E6C8" },
@@ -140,14 +141,14 @@ const products = [
   },
   {
     id: 9,
+    handle: "terracotta-towel",
     name: "Terracotta Towel",
-    description: "Personalized beach towel with polyester mink front and cotton back. 30\"×60\" of luxury.",
+    description: "Personalized beach towel with polyester mink front and cotton back. 30\"x60\" of luxury.",
     price: 49,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5885969260573620490_2048.jpg",
     tag: "Hot",
     category: "Beach",
-    hoverColor: "hover-color-coral",
-    sizes: ["30×60"],
+    sizes: ["30x60"],
     colors: [
       { name: "Terracotta", hex: "#E07A5F" }
     ],
@@ -155,14 +156,14 @@ const products = [
   },
   {
     id: 10,
+    handle: "turf-towel",
     name: "Turf Towel",
     description: "Vibrant colors, multifunctional for beach, gym, and pool use. Stand out everywhere.",
     price: 49,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/14707760509720742550_2048.jpg",
     tag: "Vibrant",
     category: "Beach",
-    hoverColor: "hover-color-sage",
-    sizes: ["30×60"],
+    sizes: ["30x60"],
     colors: [
       { name: "Green", hex: "#7A9E7E" }
     ],
@@ -170,14 +171,14 @@ const products = [
   },
   {
     id: 11,
+    handle: "sun-towel",
     name: "Sun Towel",
     description: "Mink-cotton blend offering ample space for drying off or relaxing on the sand.",
     price: 49,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/665358233442400327_2048.jpg",
     tag: "Luxe",
     category: "Beach",
-    hoverColor: "hover-color-navy",
-    sizes: ["30×60"],
+    sizes: ["30x60"],
     colors: [
       { name: "Sunrise", hex: "#FFB347" }
     ],
@@ -185,31 +186,19 @@ const products = [
   },
   {
     id: 12,
+    handle: "the-lounge-towel",
     name: "The Lounge Towel",
     description: "Luxurious beach towel designed for poolside lounging with eye-catching aesthetics.",
     price: 49,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg",
     tag: "Poolside",
     category: "Beach",
-    hoverColor: "hover-color-burgundy",
-    sizes: ["30×60"],
+    sizes: ["30x60"],
     colors: [
       { name: "Ocean Blue", hex: "#334FB4" }
     ],
     variantId: "gid://shopify/ProductVariant/47207504969982"
   },
-];
-
-// Recently purchased notifications data
-const recentPurchases = [
-  { name: "Sarah", location: "Los Angeles, CA", product: "The Crewneck Pullover", time: "2 min ago" },
-  { name: "Marcus", location: "Miami, FL", product: "Terracotta Towel", time: "5 min ago" },
-  { name: "Emma", location: "Brooklyn, NY", product: "The Everyday Tote", time: "8 min ago" },
-  { name: "Jake", location: "Austin, TX", product: "Do Not Disturb Tee", time: "12 min ago" },
-  { name: "Olivia", location: "San Francisco, CA", product: "The Organic Cap", time: "15 min ago" },
-  { name: "Liam", location: "Chicago, IL", product: "Sun Towel", time: "18 min ago" },
-  { name: "Sophia", location: "Seattle, WA", product: "The Denim Dad Hat", time: "22 min ago" },
-  { name: "Noah", location: "Denver, CO", product: "The Sun Hat", time: "25 min ago" },
 ];
 
 const featuredProducts = products.slice(0, 4);
@@ -218,36 +207,32 @@ const allCategories = ["All", "Apparel", "Accessories", "Beach"];
 const testimonials = [
   {
     name: "Sarah M.",
-    location: "Los Angeles, CA",
+    location: "Los Angeles",
     quote: "The quality is unmatched. I wear my crewneck every single weekend. It's become my signature look.",
     rating: 5,
     product: "The Crewneck Pullover",
-    verified: true
   },
   {
     name: "Marcus T.",
-    location: "Miami, FL",
+    location: "Miami",
     quote: "These towels are EVERYTHING. Took them to Tulum and got so many compliments. Already ordering more.",
     rating: 5,
     product: "Terracotta Towel",
-    verified: true
   },
   {
     name: "Emma K.",
-    location: "Brooklyn, NY",
-    quote: "Finally a brand that gets it. Champagne IS a morning drink. The aesthetic, the quality, the vibe - chef's kiss.",
+    location: "Brooklyn",
+    quote: "Finally a brand that gets it. The aesthetic, the quality, the vibe — chef's kiss.",
     rating: 5,
     product: "The Everyday Tote",
-    verified: true
   },
   {
     name: "Jake R.",
-    location: "Austin, TX",
+    location: "Austin",
     quote: "Got the oversized tee and cap. Haven't taken them off since. This is my new uniform.",
     rating: 5,
     product: "Do Not Disturb Tee",
-    verified: true
-  }
+  },
 ];
 
 const pressLogos = [
@@ -258,155 +243,61 @@ const pressLogos = [
   { name: "Complex", display: "COMPLEX" },
 ];
 
-// Type definitions
 interface Product {
   id: number;
+  handle: string;
   name: string;
   description: string;
   price: number;
   image: string;
   tag: string;
   category: string;
-  hoverColor: string;
   sizes: string[];
   colors: { name: string; hex: string }[];
-  variantId?: string; // Shopify variant GID — fill these in from your Shopify admin
+  variantId?: string;
 }
+
+// Rotating announcement messages
+const announcements = [
+  "FREE SHIPPING ON ORDERS $75+",
+  "NEW: THE CREWNECK PULLOVER IS HERE",
+  "BECAUSE CHAMPAGNE IS A MORNING DRINK",
+];
 
 export default function Home() {
   const { cartCount, addItem, openCart, isConfigured } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [shopifyProducts, setShopifyProducts] = useState<ShopifyProduct[]>([]);
   const [activeCategory, setActiveCategory] = useState('All');
-  const [isVisible, setIsVisible] = useState(false);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [visibleProducts, setVisibleProducts] = useState<Set<number>>(new Set());
-  const heroRef = useRef<HTMLDivElement>(null);
-  const productRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const [announcementIndex, setAnnouncementIndex] = useState(0);
 
   // Quick View Modal state
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
 
-  // Sticky Add to Cart state
-  const [stickyProduct, setStickyProduct] = useState<Product | null>(null);
-  const [showStickyBar, setShowStickyBar] = useState(false);
-
-  // Recent purchase notifications
-  const [notification, setNotification] = useState<typeof recentPurchases[0] | null>(null);
-  const [notificationVisible, setNotificationVisible] = useState(false);
-
-  // Video loaded state
-  const [videoLoaded, setVideoLoaded] = useState(false);
-
-  // Intersection Observer for scroll animations
+  // Rotate announcements
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          const productId = Number(entry.target.getAttribute('data-product-id'));
-          if (entry.isIntersecting) {
-            setVisibleProducts(prev => new Set([...prev, productId]));
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '50px' }
-    );
-
-    productRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => observer.disconnect();
-  }, [activeCategory]);
-
-  // Sticky bar scroll detection
-  useEffect(() => {
-    const handleScroll = () => {
-      const shopSection = document.getElementById('shop');
-      if (shopSection) {
-        const rect = shopSection.getBoundingClientRect();
-        // Show sticky bar when scrolled past the shop section header
-        if (rect.top < -200 && rect.bottom > 100) {
-          setShowStickyBar(true);
-          // Set to first visible product or first filtered product
-          if (!stickyProduct) {
-            const filtered = activeCategory === 'All'
-              ? products
-              : products.filter(p => p.category === activeCategory);
-            setStickyProduct(filtered[0]);
-          }
-        } else {
-          setShowStickyBar(false);
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeCategory, stickyProduct]);
-
-  // Recent purchase notifications
-  useEffect(() => {
-    let purchaseIndex = 0;
-
-    const showNotification = () => {
-      setNotification(recentPurchases[purchaseIndex]);
-      setNotificationVisible(true);
-
-      // Hide after 4 seconds
-      setTimeout(() => {
-        setNotificationVisible(false);
-      }, 4000);
-
-      purchaseIndex = (purchaseIndex + 1) % recentPurchases.length;
-    };
-
-    // Show first notification after 5 seconds
-    const initialTimeout = setTimeout(showNotification, 5000);
-
-    // Then show every 15-25 seconds randomly
     const interval = setInterval(() => {
-      const randomDelay = Math.random() * 10000 + 15000;
-      setTimeout(showNotification, randomDelay);
-    }, 25000);
-
-    return () => {
-      clearTimeout(initialTimeout);
-      clearInterval(interval);
-    };
-  }, []);
-
-  useEffect(() => {
-    setIsVisible(true);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+      setAnnouncementIndex((prev) => (prev + 1) % announcements.length);
+    }, 4000);
+    return () => clearInterval(interval);
   }, []);
 
   // Fetch Shopify products for variant lookup
   useEffect(() => {
     getProducts()
       .then((data) => setShopifyProducts(data))
-      .catch(() => {
-        // Silently fall back to hardcoded products
-      });
+      .catch(() => {});
   }, []);
 
   const findVariantId = useCallback(
     (product: Product, size: string, color: string): string | undefined => {
-      // Find matching Shopify product by title
       const shopifyProduct = shopifyProducts.find(
         (sp) => sp.title.toLowerCase() === product.name.toLowerCase()
       );
       if (!shopifyProduct) return product.variantId;
 
-      // Search variants for matching size + color
       const matchedVariant = shopifyProduct.variants.edges.find(({ node }) => {
         const options = node.selectedOptions;
         const sizeMatch = options.find(
@@ -415,7 +306,6 @@ export default function Home() {
         const colorMatch = options.find(
           (o) => o.name.toLowerCase() === 'color' && o.value.toLowerCase() === color.toLowerCase()
         );
-        // If the product has both size and color options, both must match
         const hasSizeOption = shopifyProduct.options.some((o) => o.name.toLowerCase() === 'size');
         const hasColorOption = shopifyProduct.options.some((o) => o.name.toLowerCase() === 'color');
         if (hasSizeOption && hasColorOption) return sizeMatch && colorMatch;
@@ -436,13 +326,10 @@ export default function Home() {
   const addToCart = useCallback((product?: Product, size?: string, color?: string, variantOverride?: string) => {
     const variantId = variantOverride || product?.variantId;
     if (variantId && isConfigured) {
-      // Use real Shopify cart
-      addItem(variantId);
+      addItem(variantId, 1, product?.name);
     } else if (!isConfigured) {
-      // Fallback: open cart drawer with "not configured" message
       openCart();
     }
-    // Close quick view if open
     if (quickViewProduct) {
       setQuickViewProduct(null);
     }
@@ -460,112 +347,8 @@ export default function Home() {
     setSelectedColor('');
   };
 
-  const setProductRef = useCallback((id: number, el: HTMLDivElement | null) => {
-    if (el) {
-      productRefs.current.set(id, el);
-    }
-  }, []);
-
   return (
-    <div className="min-h-screen bg-[#FFF6E1] grain-overlay">
-      {/* Animated cursor follower */}
-      <div
-        className="fixed w-8 h-8 rounded-full bg-gradient-to-r from-[#334FB4] to-[#E85D4C] opacity-30 pointer-events-none z-[100] mix-blend-multiply hidden lg:block transition-transform duration-100"
-        style={{
-          left: mousePosition.x - 16,
-          top: mousePosition.y - 16,
-          transform: 'scale(1)'
-        }}
-      />
-
-      {/* Recent Purchase Notification Toast */}
-      <div
-        className={`fixed bottom-24 left-4 z-[90] transition-all duration-500 ${
-          notificationVisible
-            ? 'translate-x-0 opacity-100'
-            : '-translate-x-full opacity-0'
-        }`}
-      >
-        {notification && (
-          <div className="bg-white rounded-2xl shadow-2xl p-4 max-w-xs border-2 border-[#7A9E7E]/20 animate-bounce-in">
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 rounded-xl bg-[#7A9E7E]/10 flex items-center justify-center flex-shrink-0">
-                <span className="text-2xl">🛒</span>
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-[#1a1a1a]">
-                  {notification.name} from {notification.location}
-                </p>
-                <p className="text-xs text-[#1a1a1a]/60 mt-0.5">
-                  just purchased <span className="font-semibold text-[#334FB4]">{notification.product}</span>
-                </p>
-                <p className="text-[10px] text-[#1a1a1a]/40 mt-1">{notification.time}</p>
-              </div>
-              <button
-                onClick={() => setNotificationVisible(false)}
-                className="text-[#1a1a1a]/30 hover:text-[#1a1a1a] transition-colors"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <div className="mt-3 flex items-center gap-2">
-              <div className="flex-1 h-1 bg-[#7A9E7E]/20 rounded-full overflow-hidden">
-                <div className="h-full bg-[#7A9E7E] rounded-full animate-[shrink_4s_linear_forwards]" />
-              </div>
-              <span className="text-[10px] text-[#7A9E7E] font-bold">✓ Verified</span>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Sticky Add to Cart Bar */}
-      <div
-        className={`fixed bottom-0 left-0 right-0 z-[80] transition-all duration-300 ${
-          showStickyBar ? 'translate-y-0' : 'translate-y-full'
-        }`}
-      >
-        <div className="bg-white/95 backdrop-blur-lg border-t border-black/10 shadow-2xl">
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
-            {stickyProduct && (
-              <>
-                <div className="flex items-center gap-4 flex-1 min-w-0">
-                  <div className="relative w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
-                    <Image
-                      src={stickyProduct.image}
-                      alt={stickyProduct.name}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-bold text-[#1a1a1a] truncate">{stickyProduct.name}</p>
-                    <p className="text-[#334FB4] font-black">${stickyProduct.price}</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <button
-                    onClick={() => openQuickView(stickyProduct)}
-                    className="hidden sm:flex px-4 py-2 text-sm font-semibold text-[#334FB4] hover:bg-[#334FB4]/10 rounded-full transition-colors"
-                  >
-                    Quick View
-                  </button>
-                  <button
-                    onClick={() => addToCart(stickyProduct)}
-                    className="px-6 py-3 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-105 flex items-center gap-2"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                    </svg>
-                    <span className="hidden sm:inline">Add to Cart</span>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[#FFFDF8]">
 
       {/* Quick View Modal */}
       {quickViewProduct && (
@@ -573,18 +356,14 @@ export default function Home() {
           className="fixed inset-0 z-[200] flex items-center justify-center p-4"
           onClick={closeQuickView}
         >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" />
-
-          {/* Modal */}
+          <div className="absolute inset-0 bg-black/50 animate-fade-in" />
           <div
-            className="relative bg-white rounded-3xl max-w-4xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-scale-in"
+            className="relative bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl animate-fade-in-up"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
             <button
               onClick={closeQuickView}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center hover:bg-[#A42325] hover:text-white transition-all"
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-gray-100 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -592,59 +371,48 @@ export default function Home() {
             </button>
 
             <div className="grid md:grid-cols-2">
-              {/* Image Section */}
-              <div className="relative aspect-square md:aspect-auto bg-gradient-to-br from-[#f8f8f8] to-[#f0f0f0]">
+              <div className="relative aspect-square bg-[#F5F1EB]">
                 <Image
                   src={quickViewProduct.image}
                   alt={quickViewProduct.name}
                   fill
                   className="object-cover"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className={`px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg ${
-                    quickViewProduct.tag === 'New Drop' || quickViewProduct.tag === 'Limited' ? 'bg-gradient-to-r from-[#A42325] to-[#E85D4C]' :
-                    quickViewProduct.tag === 'Sustainable' || quickViewProduct.tag === 'Organic' ? 'bg-gradient-to-r from-[#5A7E5E] to-[#7A9E7E]' :
-                    'bg-gradient-to-r from-[#334FB4] to-[#4A6BD4]'
-                  }`}>
-                    {quickViewProduct.tag}
-                  </span>
-                </div>
+                {quickViewProduct.tag && (
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1.5 bg-[#E8C547] text-[#1C1C1C] text-xs font-bold rounded-full">
+                      {quickViewProduct.tag}
+                    </span>
+                  </div>
+                )}
               </div>
 
-              {/* Details Section */}
-              <div className="p-6 md:p-8 flex flex-col">
-                <p className="text-xs text-[#334FB4] font-bold uppercase tracking-wider mb-2">
+              <div className="p-8 flex flex-col">
+                <p className="text-xs text-[#1C1C1C]/40 font-semibold uppercase tracking-wider mb-2">
                   {quickViewProduct.category}
                 </p>
-                <h2 className="text-2xl md:text-3xl font-black text-[#1a1a1a] mb-2">
+                <h2 className="font-[family-name:var(--font-eb-garamond)] text-2xl md:text-3xl font-semibold text-[#1C1C1C] mb-2">
                   {quickViewProduct.name}
                 </h2>
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl font-black text-[#1a1a1a]">${quickViewProduct.price}</span>
-                  <div className="flex items-center gap-1 text-[#E85D4C]">
-                    <span className="text-sm">★★★★★</span>
-                    <span className="text-xs text-[#1a1a1a]/50">(124 reviews)</span>
-                  </div>
-                </div>
-                <p className="text-[#1a1a1a]/60 mb-6 leading-relaxed">
+                <p className="text-xl font-bold text-[#1C1C1C] mb-4">${quickViewProduct.price}</p>
+                <p className="text-[#1C1C1C]/60 mb-6 text-sm leading-relaxed">
                   {quickViewProduct.description}
                 </p>
 
-                {/* Color Selection */}
                 {quickViewProduct.colors.length > 0 && (
-                  <div className="mb-6">
-                    <p className="text-sm font-bold text-[#1a1a1a] mb-3">
-                      Color: <span className="font-normal text-[#1a1a1a]/60">{selectedColor}</span>
+                  <div className="mb-5">
+                    <p className="text-xs font-semibold text-[#1C1C1C] mb-2 uppercase tracking-wider">
+                      Color: <span className="font-normal normal-case text-[#1C1C1C]/50">{selectedColor}</span>
                     </p>
-                    <div className="flex gap-3">
+                    <div className="flex gap-2">
                       {quickViewProduct.colors.map((color) => (
                         <button
                           key={color.name}
                           onClick={() => setSelectedColor(color.name)}
-                          className={`w-10 h-10 rounded-full border-2 transition-all hover:scale-110 ${
+                          className={`w-8 h-8 rounded-full border-2 transition-all ${
                             selectedColor === color.name
-                              ? 'border-[#334FB4] ring-2 ring-[#334FB4]/30 scale-110'
-                              : 'border-gray-200'
+                              ? 'border-[#1C1C1C] scale-110'
+                              : 'border-gray-200 hover:border-gray-400'
                           }`}
                           style={{ backgroundColor: color.hex }}
                           title={color.name}
@@ -654,20 +422,19 @@ export default function Home() {
                   </div>
                 )}
 
-                {/* Size Selection */}
                 <div className="mb-6">
-                  <p className="text-sm font-bold text-[#1a1a1a] mb-3">
-                    Size: <span className="font-normal text-[#1a1a1a]/60">{selectedSize}</span>
+                  <p className="text-xs font-semibold text-[#1C1C1C] mb-2 uppercase tracking-wider">
+                    Size: <span className="font-normal normal-case text-[#1C1C1C]/50">{selectedSize}</span>
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {quickViewProduct.sizes.map((size) => (
                       <button
                         key={size}
                         onClick={() => setSelectedSize(size)}
-                        className={`px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
                           selectedSize === size
-                            ? 'bg-[#334FB4] text-white'
-                            : 'bg-[#FFF6E1] text-[#1a1a1a] hover:bg-[#334FB4]/10'
+                            ? 'bg-[#1C1C1C] text-white'
+                            : 'bg-[#F5F1EB] text-[#1C1C1C] hover:bg-[#E8E4DE]'
                         }`}
                       >
                         {size}
@@ -676,25 +443,20 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* Add to Cart Button */}
                 <button
                   onClick={() => {
                     const matchedVariantId = findVariantId(quickViewProduct, selectedSize, selectedColor);
                     addToCart(quickViewProduct, selectedSize, selectedColor, matchedVariantId);
                   }}
-                  className="mt-auto w-full py-4 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white font-bold rounded-full shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] flex items-center justify-center gap-3"
+                  className="mt-auto w-full py-4 btn-golden text-base"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                  </svg>
                   Add to Cart — ${quickViewProduct.price}
                 </button>
 
-                {/* Trust badges */}
-                <div className="flex items-center justify-center gap-6 mt-6 text-xs text-[#1a1a1a]/50">
-                  <span className="flex items-center gap-1">🚚 Free Shipping</span>
-                  <span className="flex items-center gap-1">↩️ Easy Returns</span>
-                  <span className="flex items-center gap-1">✓ In Stock</span>
+                <div className="flex items-center justify-center gap-6 mt-4 text-xs text-[#1C1C1C]/40">
+                  <span>Free Shipping $75+</span>
+                  <span>30-Day Returns</span>
+                  <span>In Stock</span>
                 </div>
               </div>
             </div>
@@ -702,26 +464,27 @@ export default function Home() {
         </div>
       )}
 
-      {/* Announcement Bar */}
-      <div className="bg-gradient-to-r from-[#334FB4] via-[#4A6BD4] to-[#334FB4] text-white text-center py-3 px-4 text-sm font-medium animate-gradient bg-[length:200%_100%] relative overflow-hidden">
-        <div className="absolute inset-0 animate-shimmer"></div>
-        <span className="relative z-10">
-          <span className="hidden sm:inline">✨ FREE SHIPPING ON ORDERS $75+ ✨</span>
-          <span className="sm:hidden">✨ FREE SHIPPING $75+ ✨</span>
-          <span className="mx-3">•</span>
-          <span className="underline cursor-pointer hover:no-underline font-bold">Shop Now</span>
-        </span>
+      {/* Announcement Bar — Rotating */}
+      <div className="bg-[#1C1C1C] text-white text-center py-2.5 px-4 text-xs font-semibold tracking-wider relative overflow-hidden">
+        <div
+          key={announcementIndex}
+          className="animate-fade-in"
+        >
+          {announcements[announcementIndex]}
+          <span className="mx-3 text-[#E8C547]">/</span>
+          <a href="#shop" className="underline hover:no-underline">Shop Now</a>
+        </div>
       </div>
 
       {/* Navigation */}
-      <nav className="sticky top-0 w-full z-50 glass-effect border-b border-black/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <nav className="sticky top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-black/5">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3">
           <div className="flex items-center justify-between">
             {/* Logo */}
-            <div className="flex items-center gap-3 group cursor-pointer">
-              <div className="relative w-12 h-12 hover-scale">
+            <Link href="/" className="flex items-center gap-3">
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 flex-shrink-0">
                 <Image
-                  src="/logo.png"
+                  src="/logo-icon.png"
                   alt="Hotel Breakfast"
                   fill
                   className="object-contain"
@@ -729,49 +492,67 @@ export default function Home() {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="text-lg sm:text-xl font-black tracking-tight text-[#1a1a1a] leading-none group-hover:text-[#334FB4] transition-colors">HOTEL BREAKFAST</span>
-                <span className="text-[10px] tracking-[0.15em] text-[#334FB4] font-semibold hidden sm:block animate-color-cycle">BECAUSE CHAMPAGNE IS A MORNING DRINK</span>
+                <span className="text-sm sm:text-base font-bold tracking-tight text-[#1C1C1C] leading-none">
+                  HOTEL BREAKFAST
+                </span>
+                <span className="text-[9px] tracking-[0.12em] text-[#1C1C1C]/40 font-medium hidden sm:block mt-0.5">
+                  BECAUSE CHAMPAGNE IS A MORNING DRINK
+                </span>
               </div>
-            </div>
+            </Link>
 
             {/* Desktop Menu */}
             <div className="hidden lg:flex items-center gap-8">
-              {['Shop All', 'Bestsellers', 'Our Story'].map((item, i) => (
-                <a
-                  key={item}
-                  href={`#${item.toLowerCase().replace(' ', '')}`}
-                  className="text-[#1a1a1a] hover:text-[#334FB4] transition-all font-semibold hover-underline-animated relative"
-                  style={{ animationDelay: `${i * 0.1}s` }}
-                >
-                  {item}
-                </a>
+              {[
+                { label: 'Shop', href: '#shop' },
+                { label: 'Our Story', href: '#story' },
+                { label: 'Blog', href: '/blog' },
+                { label: 'Size Guide', href: '/size-guide' },
+              ].map((item) => (
+                item.href.startsWith('/') ? (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="text-sm text-[#1C1C1C]/70 hover:text-[#1C1C1C] transition-colors font-medium"
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="text-sm text-[#1C1C1C]/70 hover:text-[#1C1C1C] transition-colors font-medium"
+                  >
+                    {item.label}
+                  </a>
+                )
               ))}
             </div>
 
             {/* Right Side */}
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
               <button
                 onClick={openCart}
-                className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#334FB4]/10 transition-all hover-scale group"
+                className="relative flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#F5F1EB] transition-colors"
               >
-                <svg className="w-5 h-5 group-hover:animate-wiggle" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
                 {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#A42325] text-white text-xs rounded-full flex items-center justify-center font-bold animate-bounce-in">
+                  <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-[#E8C547] text-[#1C1C1C] text-[10px] rounded-full flex items-center justify-center font-bold">
                     {cartCount}
                   </span>
                 )}
               </button>
               <button
-                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#334FB4]/10 transition-all"
+                className="lg:hidden flex items-center justify-center w-10 h-10 rounded-full hover:bg-[#F5F1EB] transition-colors"
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   {isMenuOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
                   ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
                   )}
                 </svg>
               </button>
@@ -780,17 +561,34 @@ export default function Home() {
 
           {/* Mobile Menu */}
           {isMenuOpen && (
-            <div className="lg:hidden mt-4 pb-4 border-t border-black/10 pt-4 animate-slide-up">
-              <div className="flex flex-col gap-4">
-                {['Shop All', 'Bestsellers', 'Our Story'].map((item, i) => (
-                  <a
-                    key={item}
-                    href={`#${item.toLowerCase().replace(' ', '')}`}
-                    className="text-[#1a1a1a] font-semibold text-lg hover:text-[#334FB4] transition-colors animate-slide-in-left"
-                    style={{ animationDelay: `${i * 0.1}s` }}
-                  >
-                    {item}
-                  </a>
+            <div className="lg:hidden mt-3 pb-3 border-t border-black/5 pt-3">
+              <div className="flex flex-col gap-3">
+                {[
+                  { label: 'Shop', href: '#shop' },
+                  { label: 'Our Story', href: '#story' },
+                  { label: 'Blog', href: '/blog' },
+                  { label: 'Size Guide', href: '/size-guide' },
+                  { label: 'Track Order', href: '/track' },
+                ].map((item) => (
+                  item.href.startsWith('/') ? (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="text-[#1C1C1C] font-medium text-base hover:text-[#C4553A] transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <a
+                      key={item.label}
+                      href={item.href}
+                      className="text-[#1C1C1C] font-medium text-base hover:text-[#C4553A] transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.label}
+                    </a>
+                  )
                 ))}
               </div>
             </div>
@@ -798,175 +596,54 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section with Video Background */}
-      <section ref={heroRef} className="relative overflow-hidden min-h-[90vh] flex items-center">
-        {/* Video Background */}
-        <div className="absolute inset-0 z-0">
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            onLoadedData={() => setVideoLoaded(true)}
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-            poster="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920"
-          >
-            <source src="https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4" type="video/mp4" />
-          </video>
-          {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#334FB4]/90 via-[#334FB4]/70 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#FFF6E1] via-transparent to-transparent" />
-        </div>
+      {/* Hero Section — Large Image, Centered Copy */}
+      <section className="relative overflow-hidden">
+        <div className="relative min-h-[85vh] flex items-center justify-center">
+          {/* Background Image */}
+          <div className="absolute inset-0">
+            <Image
+              src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=1920"
+              alt="Hotel poolside morning"
+              fill
+              priority
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-[#1C1C1C]/40" />
+          </div>
 
-        {/* Animated background blobs (fallback/accent) */}
-        <div className="absolute top-20 left-10 w-72 h-72 bg-[#334FB4] blob-bg animate-blob opacity-30" />
-        <div className="absolute bottom-40 right-1/4 w-64 h-64 bg-[#A42325] blob-bg animate-morph stagger-3 opacity-20" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-16 sm:py-24 lg:py-32 w-full">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className={`text-center lg:text-left transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/20 backdrop-blur-md rounded-full mb-8 animate-bounce-in border border-white/30">
-                <span className="relative flex h-3 w-3">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-                </span>
-                <span className="text-white text-sm font-semibold">New Summer Collection</span>
-                <span className="text-xl animate-wiggle">☀️</span>
-              </div>
-
-              <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black text-white leading-[0.95] mb-6">
-                <span className="block animate-slide-in-left">Because</span>
-                <span className="block animate-slide-in-left stagger-1">Champagne is a</span>
-                <span className="block text-[#FFF6E1] animate-slide-in-left stagger-2 animate-text-glow">Morning Drink.</span>
-              </h1>
-
-              <p className="text-white/80 text-lg sm:text-xl max-w-lg mx-auto lg:mx-0 mb-10 leading-relaxed animate-fade-in stagger-3">
-                Lifestyle essentials for those who believe every morning should feel like vacation.
-                <span className="font-bold text-white"> Premium quality. Effortless style. Zero compromises.</span>
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-slide-up stagger-4">
-                <a href="#shop" className="group btn-primary px-8 py-4 bg-white text-[#334FB4] font-bold rounded-full shadow-2xl flex items-center justify-center gap-3 hover:gap-4 transition-all">
-                  <span>Shop the Collection</span>
-                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </a>
-                <a href="#shop" className="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-full hover:bg-white hover:text-[#334FB4] transition-all flex items-center justify-center hover-glow">
-                  View All Products
-                </a>
-              </div>
-
-              {/* Trust Badges */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 mt-10 text-white/80 text-sm animate-fade-in stagger-5">
-                <div className="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-                  <span className="text-lg">🔒</span>
-                  <span>Secure Checkout</span>
-                </div>
-                <div className="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-                  <span className="text-lg animate-float">🚚</span>
-                  <span>Free Shipping $75+</span>
-                </div>
-                <div className="flex items-center gap-2 hover:text-white transition-colors cursor-default">
-                  <span className="text-lg animate-pulse-scale">⭐</span>
-                  <span>4.9/5 (2k+ Reviews)</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Hero Image Grid */}
-            <div className={`relative transition-all duration-1000 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-4">
-                  <div
-                    className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float cursor-pointer"
-                    onClick={() => openQuickView(products[0])}
-                  >
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg"
-                      alt="The Crewneck Pullover"
-                      fill
-                      className="object-cover group-hover:scale-110 group-hover:rotate-2 transition-all duration-700"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur px-4 py-2 rounded-full text-sm font-bold text-[#334FB4] transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
-                      Quick View
-                    </div>
-                  </div>
-                  <div
-                    className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float-reverse cursor-pointer"
-                    onClick={() => openQuickView(products[5])}
-                  >
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1875496474666638470_2048.jpg"
-                      alt="The Organic Cap"
-                      fill
-                      className="object-cover group-hover:scale-110 group-hover:-rotate-2 transition-all duration-700"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                </div>
-                <div className="space-y-4 pt-8">
-                  <div
-                    className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float stagger-2 cursor-pointer"
-                    onClick={() => openQuickView(products[8])}
-                  >
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/5885969260573620490_2048.jpg"
-                      alt="Terracotta Towel"
-                      fill
-                      className="object-cover group-hover:scale-110 group-hover:rotate-2 transition-all duration-700"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                  </div>
-                  <div
-                    className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl bg-white/10 relative group animate-float-reverse stagger-3 cursor-pointer"
-                    onClick={() => openQuickView(products[2])}
-                  >
-                    <Image
-                      src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/8999220662666491318_2048.jpg"
-                      alt="Do Not Disturb Tee"
-                      fill
-                      className="object-cover group-hover:scale-110 group-hover:-rotate-2 transition-all duration-700"
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                    <div className="absolute top-4 right-4 bg-[#A42325] text-white px-4 py-1.5 rounded-full text-xs font-bold animate-pulse-scale">
-                      NEW
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Floating elements */}
-              <div className="absolute -top-4 -left-4 text-5xl animate-float">🥂</div>
-              <div className="absolute -bottom-4 -right-4 text-4xl animate-float-reverse">✨</div>
-              <div className="absolute top-1/2 -right-8 text-3xl animate-wiggle">☀️</div>
+          {/* Content */}
+          <div className="relative z-10 text-center px-4 max-w-3xl mx-auto">
+            <p className="font-[family-name:var(--font-eb-garamond)] italic text-white/80 text-lg sm:text-xl mb-4">
+              Leisure-Enhancing Essentials
+            </p>
+            <h1 className="font-[family-name:var(--font-eb-garamond)] text-4xl sm:text-6xl lg:text-7xl text-white leading-[1.05] mb-6">
+              Because Champagne<br />
+              <em>is a Morning Drink</em>
+            </h1>
+            <p className="text-white/70 text-base sm:text-lg max-w-xl mx-auto mb-10 leading-relaxed">
+              Lifestyle essentials for those who believe every morning should feel like the first day of vacation.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="#shop" className="btn-golden px-10 py-4 text-base inline-flex items-center justify-center gap-2">
+                Shop the Collection
+              </a>
+              <a href="#story" className="btn-outline px-10 py-4 text-base border-white text-white hover:bg-white hover:text-[#1C1C1C] inline-flex items-center justify-center">
+                Our Story
+              </a>
             </div>
           </div>
         </div>
-
-        {/* Wave divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-            <path d="M0 120L60 105C120 90 240 60 360 45C480 30 600 30 720 37.5C840 45 960 60 1080 67.5C1200 75 1320 75 1380 75L1440 75V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="#FFF6E1"/>
-          </svg>
-        </div>
       </section>
 
-      {/* Scrolling Marquee */}
-      <section className="py-4 bg-[#1a1a1a] overflow-hidden">
+      {/* Social Proof Bar */}
+      <section className="py-3 bg-[#F5F1EB] overflow-hidden">
         <div className="animate-marquee whitespace-nowrap flex">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex items-center gap-8 mx-8">
-              {['CHAMPAGNE MORNINGS', 'PREMIUM QUALITY', 'FREE SHIPPING', 'SUSTAINABLE', 'HOTEL VIBES'].map((text, j) => (
-                <span key={j} className="text-white/80 text-sm font-bold tracking-widest flex items-center gap-4">
+            <div key={i} className="flex items-center gap-10 mx-10">
+              {['4.9 / 5 RATING', '2,000+ REVIEWS', 'FREE SHIPPING $75+', 'SUSTAINABLE MATERIALS', '30-DAY RETURNS'].map((text, j) => (
+                <span key={j} className="text-[#1C1C1C]/40 text-xs font-semibold tracking-widest flex items-center gap-5">
                   {text}
-                  <span className="text-[#E85D4C] text-lg">✦</span>
+                  <span className="text-[#E8C547]">/</span>
                 </span>
               ))}
             </div>
@@ -974,16 +651,16 @@ export default function Home() {
         </div>
       </section>
 
-      {/* As Seen In */}
-      <section className="py-16 px-4 sm:px-6 border-b border-black/5">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-center text-[#1a1a1a]/40 text-sm font-medium tracking-widest uppercase mb-10">As Featured In</p>
-          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-16">
+      {/* As Featured In */}
+      <section className="py-14 px-4 sm:px-6 bg-white border-b border-black/5">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-[#1C1C1C]/30 text-xs font-semibold tracking-[0.2em] uppercase mb-8">As Featured In</p>
+          <div className="flex flex-wrap items-center justify-center gap-8 sm:gap-14">
             {pressLogos.map((logo, i) => (
               <span
                 key={i}
-                className="text-2xl sm:text-3xl font-black text-[#1a1a1a]/15 hover:text-[#334FB4] transition-all duration-500 tracking-tight cursor-default hover:scale-110 hover-glow"
-                style={{ animationDelay: `${i * 0.1}s` }}
+                className="text-xl sm:text-2xl font-serif font-bold text-[#1C1C1C]/15 hover:text-[#1C1C1C]/40 transition-colors duration-300 tracking-tight cursor-default"
+                style={{ fontFamily: 'var(--font-eb-garamond), serif' }}
               >
                 {logo.display}
               </span>
@@ -992,79 +669,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Bestsellers Section */}
-      <section id="bestsellers" className="py-20 sm:py-28 px-4 sm:px-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-14">
+      {/* Bestsellers */}
+      <section id="bestsellers" className="py-20 sm:py-24 px-4 sm:px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
             <div>
-              <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#A42325] to-[#E85D4C] text-white text-xs font-bold rounded-full mb-4 tracking-wide animate-pulse-scale">
-                🔥 FAN FAVORITES
-              </span>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a1a1a]">
-                <span className="gradient-text">Bestsellers</span>
+              <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-2">Fan Favorites</p>
+              <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C]">
+                Bestsellers
               </h2>
             </div>
-            <a href="#shop" className="text-[#334FB4] font-bold hover:text-[#A42325] transition-colors flex items-center gap-2 group text-lg">
-              View All
-              <svg className="w-5 h-5 group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
+            <a href="#shop" className="text-sm font-semibold text-[#1C1C1C]/60 hover:text-[#1C1C1C] transition-colors flex items-center gap-1 underline underline-offset-4">
+              View All Products
             </a>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-            {featuredProducts.map((product, index) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {featuredProducts.map((product) => (
               <div
                 key={product.id}
-                ref={(el) => setProductRef(product.id, el)}
-                data-product-id={product.id}
+                className="group product-card cursor-pointer"
                 onClick={() => openQuickView(product)}
-                className={`group product-card bg-white rounded-3xl overflow-hidden shadow-lg cursor-pointer border-2 border-transparent hover:border-[#334FB4] transition-all duration-700 ${
-                  visibleProducts.has(product.id)
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-12'
-                }`}
-                style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-[#f8f8f8] to-[#f0f0f0]">
+                <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover product-image transition-all duration-700"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
                     sizes="(max-width: 768px) 50vw, 25vw"
                   />
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className={`product-tag px-4 py-1.5 rounded-full text-xs font-bold text-white shadow-lg ${
-                      product.tag === 'New Drop' || product.tag === 'Limited' ? 'bg-gradient-to-r from-[#A42325] to-[#E85D4C]' :
-                      product.tag === 'Sustainable' || product.tag === 'Organic' ? 'bg-gradient-to-r from-[#5A7E5E] to-[#7A9E7E]' :
-                      'bg-gradient-to-r from-[#334FB4] to-[#4A6BD4]'
-                    }`}>
-                      {product.tag}
-                    </span>
-                  </div>
+                  {product.tag && (
+                    <div className="absolute top-3 left-3">
+                      <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
+                        {product.tag}
+                      </span>
+                    </div>
+                  )}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className={`absolute bottom-4 right-4 w-14 h-14 ${product.hoverColor} bg-[#1a1a1a] text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 shadow-xl hover:scale-110`}
+                    className="absolute bottom-3 right-3 w-10 h-10 bg-white text-[#1C1C1C] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:bg-[#E8C547]"
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
                     </svg>
                   </button>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
-                <div className="p-5 sm:p-6">
-                  <p className="text-xs text-[#334FB4] font-bold uppercase tracking-wider mb-2">{product.category}</p>
-                  <h3 className="font-bold text-base sm:text-lg text-[#1a1a1a] mb-2 group-hover:text-[#334FB4] transition-colors">
-                    {product.name}
+                <div>
+                  <h3 className="font-medium text-sm text-[#1C1C1C] mb-1 group-hover:underline">
+                    <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
+                      {product.name}
+                    </Link>
                   </h3>
-                  <p className="text-[#1a1a1a]/50 text-sm mb-4 line-clamp-2 hidden sm:block">{product.description}</p>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#1a1a1a] font-black text-xl">${product.price}</span>
-                    <div className="flex items-center gap-1 text-[#E85D4C]">
-                      <span className="text-sm">★★★★★</span>
-                    </div>
-                  </div>
+                  <p className="text-sm text-[#1C1C1C]/50">${product.price}</p>
                 </div>
               </div>
             ))}
@@ -1072,59 +729,90 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Value Props Banner */}
-      <section className="py-16 sm:py-20 px-4 sm:px-6 bg-gradient-to-r from-[#1a1a1a] via-[#2a2a2a] to-[#1a1a1a]">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12">
-            {[
-              { icon: "🌿", title: "Sustainable", desc: "Organic & eco-friendly materials", color: "#7A9E7E" },
-              { icon: "✨", title: "Premium Quality", desc: "Built to last, made to impress", color: "#334FB4" },
-              { icon: "🚚", title: "Free Shipping", desc: "On all orders over $75", color: "#E85D4C" },
-              { icon: "💯", title: "Satisfaction", desc: "30-day money-back guarantee", color: "#A42325" },
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="text-center group cursor-default animate-fade-in-up"
-                style={{ animationDelay: `${i * 0.1}s` }}
-              >
-                <span className="text-4xl sm:text-5xl mb-4 block group-hover:animate-wiggle transition-transform">{item.icon}</span>
-                <h3 className="text-white font-bold text-lg mb-2 group-hover:text-[#E85D4C] transition-colors">{item.title}</h3>
-                <p className="text-white/50 text-sm">{item.desc}</p>
-                <div
-                  className="w-12 h-1 mx-auto mt-4 rounded-full opacity-0 group-hover:opacity-100 transition-all"
-                  style={{ backgroundColor: item.color }}
+      {/* Story Section */}
+      <section id="story" className="py-20 sm:py-28 px-4 sm:px-6 bg-[#F5F1EB]">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            {/* Images */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="aspect-[3/4] rounded-xl overflow-hidden relative">
+                <Image
+                  src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/13733165656261452820_2048.jpg"
+                  alt="The Everyday Tote"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               </div>
-            ))}
+              <div className="aspect-[3/4] rounded-xl overflow-hidden mt-8 relative">
+                <Image
+                  src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg"
+                  alt="The Lounge Towel"
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                />
+              </div>
+            </div>
+
+            {/* Copy */}
+            <div>
+              <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-3">Our Story</p>
+              <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-8 leading-tight">
+                We Started With<br />
+                <em>a Simple Belief</em>
+              </h2>
+              <div className="space-y-5 text-[#1C1C1C]/60 text-base leading-relaxed">
+                <p>
+                  <strong className="text-[#1C1C1C]">Every morning should feel like you&apos;re on vacation.</strong> That moment when you wake up in a beautiful hotel, sun streaming through the windows, nothing on the agenda but relaxation.
+                </p>
+                <p>
+                  We created Hotel Breakfast for the dreamers, the travelers, the people who believe that champagne IS a morning drink. Our pieces are designed to bring that indulgent hotel morning experience into your everyday life.
+                </p>
+                <p>
+                  Premium materials. Thoughtful design. Effortless style.
+                </p>
+              </div>
+              <div className="flex gap-10 mt-10">
+                {[
+                  { value: "15K+", label: "Happy Customers" },
+                  { value: "4.9/5", label: "Average Rating" },
+                  { value: "50+", label: "Countries" },
+                ].map((stat) => (
+                  <div key={stat.label}>
+                    <p className="text-2xl sm:text-3xl font-bold text-[#1C1C1C]">{stat.value}</p>
+                    <p className="text-[#1C1C1C]/40 text-xs mt-1 font-medium">{stat.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Full Collection */}
       <section id="shop" className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <span className="inline-block px-5 py-2 bg-[#334FB4]/10 text-[#334FB4] text-xs font-bold rounded-full mb-4 tracking-wide">
-              THE COLLECTION
-            </span>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-6">
-              Shop All <span className="gradient-text">Products</span>
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-2">The Collection</p>
+            <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-4">
+              Shop All
             </h2>
-            <p className="text-[#1a1a1a]/60 max-w-2xl mx-auto text-lg">
-              Curated essentials for the modern lifestyle. Every piece designed to make your mornings feel extraordinary.
+            <p className="text-[#1C1C1C]/50 max-w-lg mx-auto text-sm">
+              Curated essentials for the modern lifestyle. Every piece designed to make your mornings extraordinary.
             </p>
           </div>
 
           {/* Category Filter */}
-          <div className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-12">
-            {allCategories.map((cat, i) => (
+          <div className="flex flex-wrap justify-center gap-2 sm:gap-3 mb-10">
+            {allCategories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-6 sm:px-8 py-3 rounded-full font-bold text-sm transition-all duration-300 ${
+                className={`px-5 py-2.5 rounded-full text-sm font-semibold transition-all ${
                   activeCategory === cat
-                    ? 'bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white shadow-lg shadow-[#334FB4]/30 scale-105'
-                    : 'bg-[#FFF6E1] text-[#1a1a1a] hover:bg-[#334FB4] hover:text-white hover:scale-105'
+                    ? 'bg-[#1C1C1C] text-white'
+                    : 'bg-[#F5F1EB] text-[#1C1C1C]/60 hover:bg-[#E8E4DE] hover:text-[#1C1C1C]'
                 }`}
               >
                 {cat}
@@ -1132,69 +820,45 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 sm:gap-8">
-            {filteredProducts.map((product, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {filteredProducts.map((product) => (
               <div
                 key={product.id}
-                ref={(el) => setProductRef(product.id + 100, el)}
-                data-product-id={product.id + 100}
-                onClick={() => {
-                  openQuickView(product);
-                  setStickyProduct(product);
-                }}
-                className={`group product-card bg-[#FFF6E1] rounded-3xl overflow-hidden cursor-pointer border-2 border-transparent hover:border-[#334FB4] transition-all duration-700 ${
-                  visibleProducts.has(product.id + 100)
-                    ? 'opacity-100 translate-y-0 rotate-0'
-                    : 'opacity-0 translate-y-16 rotate-2'
-                }`}
-                style={{ transitionDelay: `${(index % 4) * 100}ms` }}
+                className="group product-card cursor-pointer"
+                onClick={() => openQuickView(product)}
               >
-                <div className="aspect-square relative overflow-hidden">
+                <div className="aspect-[3/4] relative overflow-hidden rounded-xl bg-[#F5F1EB] mb-4">
                   <Image
                     src={product.image}
                     alt={product.name}
                     fill
-                    className="object-cover product-image transition-all duration-700"
-                    sizes="(max-width: 768px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className={`product-tag px-3 sm:px-4 py-1.5 rounded-full text-[10px] sm:text-xs font-bold text-white ${
-                      product.tag === 'New Drop' || product.tag === 'Limited' ? 'bg-gradient-to-r from-[#A42325] to-[#E85D4C]' :
-                      product.tag === 'Sustainable' || product.tag === 'Organic' ? 'bg-gradient-to-r from-[#5A7E5E] to-[#7A9E7E]' :
-                      'bg-gradient-to-r from-[#334FB4] to-[#4A6BD4]'
-                    }`}>
-                      {product.tag}
-                    </span>
-                  </div>
-                  {/* Quick View overlay */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
-                    <span className="bg-white text-[#1a1a1a] px-6 py-3 rounded-full font-bold text-sm transform translate-y-4 group-hover:translate-y-0 transition-transform shadow-xl">
-                      Quick View
-                    </span>
-                  </div>
+                  {product.tag && (
+                    <div className="absolute top-3 left-3">
+                      <span className="px-3 py-1 bg-[#E8C547] text-[#1C1C1C] text-[10px] font-bold rounded-full uppercase tracking-wider">
+                        {product.tag}
+                      </span>
+                    </div>
+                  )}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                    className={`absolute bottom-4 right-4 w-12 h-12 sm:w-14 sm:h-14 ${product.hoverColor} bg-white text-[#1a1a1a] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0 shadow-xl`}
+                    className="absolute bottom-3 right-3 w-10 h-10 bg-white text-[#1C1C1C] rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all shadow-lg hover:bg-[#E8C547]"
                   >
-                    <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v12m6-6H6" />
                     </svg>
                   </button>
                 </div>
-                <div className="p-5 sm:p-6 bg-white">
-                  <p className="text-[10px] sm:text-xs text-[#334FB4] font-bold uppercase tracking-wider mb-2">{product.category}</p>
-                  <h3 className="font-bold text-sm sm:text-base text-[#1a1a1a] mb-3 group-hover:text-[#334FB4] transition-colors">
-                    {product.name}
+                <div>
+                  <p className="text-[10px] text-[#1C1C1C]/30 font-semibold uppercase tracking-wider mb-1">{product.category}</p>
+                  <h3 className="font-medium text-sm text-[#1C1C1C] mb-1 group-hover:underline">
+                    <Link href={`/products/${product.handle}`} onClick={(e) => e.stopPropagation()}>
+                      {product.name}
+                    </Link>
                   </h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#1a1a1a] font-black text-lg sm:text-xl">${product.price}</span>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); addToCart(product); }}
-                      className="text-xs sm:text-sm font-bold text-[#334FB4] hover:text-[#A42325] transition-colors"
-                    >
-                      Add to Cart →
-                    </button>
-                  </div>
+                  <p className="text-sm text-[#1C1C1C]/50">${product.price}</p>
                 </div>
               </div>
             ))}
@@ -1202,157 +866,59 @@ export default function Home() {
         </div>
       </section>
 
-      {/* About / Story Section */}
-      <section id="ourstory" className="py-20 sm:py-28 px-4 sm:px-6 bg-[#FFF6E1] relative overflow-hidden">
-        {/* Background elements */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#334FB4]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#E85D4C]/5 rounded-full blur-3xl" />
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-center">
-            <div className="order-2 lg:order-1">
-              <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#E85D4C] to-[#A42325] text-white text-xs font-bold rounded-full mb-6 tracking-wide">
-                OUR STORY
-              </span>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-8 leading-tight">
-                We Started With<br />
-                <span className="gradient-text">a Simple Belief</span>
-              </h2>
-              <div className="space-y-6 text-[#1a1a1a]/70 text-lg leading-relaxed">
-                <p>
-                  <strong className="text-[#1a1a1a]">Every morning should feel like you&apos;re on vacation.</strong> That moment when you wake up in a beautiful hotel, sun streaming through the windows, nothing on the agenda but relaxation.
-                </p>
-                <p>
-                  We created Hotel Breakfast for the dreamers, the travelers, the people who believe that champagne IS a morning drink. Our pieces are designed to bring that indulgent hotel morning experience into your everyday life.
-                </p>
-                <p className="text-[#334FB4] font-semibold">
-                  Premium materials. Thoughtful design. Effortless style. Because you deserve to feel like a VIP every single day.
-                </p>
-              </div>
-              <div className="flex flex-wrap gap-10 mt-10">
-                {[
-                  { value: "15K+", label: "Happy Customers", color: "#334FB4" },
-                  { value: "4.9★", label: "Average Rating", color: "#E85D4C" },
-                  { value: "50+", label: "Countries", color: "#7A9E7E" },
-                ].map((stat, i) => (
-                  <div key={i} className="group cursor-default">
-                    <p className="text-4xl sm:text-5xl font-black transition-colors group-hover:scale-110 transition-transform" style={{ color: stat.color }}>{stat.value}</p>
-                    <p className="text-[#1a1a1a]/50 text-sm mt-1">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="order-1 lg:order-2 relative">
-              <div className="grid grid-cols-2 gap-6">
-                <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl relative group animate-float">
-                  <Image
-                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/13733165656261452820_2048.jpg"
-                    alt="The Everyday Tote"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </div>
-                <div className="aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl mt-12 relative group animate-float-reverse">
-                  <Image
-                    src="https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg"
-                    alt="The Lounge Towel"
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    sizes="(max-width: 768px) 50vw, 25vw"
-                  />
-                </div>
-              </div>
-              <div className="absolute -bottom-6 -left-6 gradient-border bg-white p-6 sm:p-8 rounded-2xl shadow-2xl max-w-[250px] sm:max-w-xs">
-                <p className="text-[#1a1a1a] font-bold text-lg">&quot;The quality is insane&quot;</p>
-                <p className="text-[#1a1a1a]/50 text-sm mt-2">— Sarah M., Los Angeles</p>
-                <div className="flex gap-1 mt-2 text-[#E85D4C]">★★★★★</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Reviews Section */}
-      <section id="reviews" className="py-20 sm:py-28 px-4 sm:px-6 bg-white">
-        <div className="max-w-7xl mx-auto">
+      {/* Reviews */}
+      <section className="py-20 sm:py-24 px-4 sm:px-6 bg-[#F5F1EB]">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-14">
-            <span className="inline-block px-5 py-2 bg-[#7A9E7E]/20 text-[#5A7E5E] text-xs font-bold rounded-full mb-4 tracking-wide">
-              💬 REVIEWS
-            </span>
-            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-6">
-              What People Are <span className="gradient-text">Saying</span>
+            <p className="text-xs font-semibold text-[#C4553A] uppercase tracking-[0.15em] mb-2">Reviews</p>
+            <h2 className="font-[family-name:var(--font-eb-garamond)] text-3xl sm:text-4xl lg:text-5xl text-[#1C1C1C] mb-3">
+              What People Are Saying
             </h2>
-            <div className="flex items-center justify-center gap-3 text-xl">
-              <span className="text-[#E85D4C] text-2xl animate-pulse-scale">★★★★★</span>
-              <span className="font-black text-2xl">4.9</span>
-              <span className="text-[#1a1a1a]/50">from 2,000+ reviews</span>
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <span className="text-[#E8C547] text-base">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              <span className="font-bold">4.9</span>
+              <span className="text-[#1C1C1C]/40">from 2,000+ reviews</span>
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             {testimonials.map((review, i) => (
               <div
                 key={i}
-                className="group bg-gradient-to-br from-[#FFF6E1] to-white rounded-3xl p-6 sm:p-8 hover-lift border-2 border-transparent hover:border-[#334FB4] transition-all animate-fade-in-up"
-                style={{ animationDelay: `${i * 0.1}s` }}
+                className="bg-white rounded-xl p-6 sm:p-7"
               >
-                <div className="flex items-center gap-1 text-[#E85D4C] mb-4 group-hover:animate-wiggle">
+                <div className="flex items-center gap-0.5 text-[#E8C547] mb-4">
                   {[...Array(review.rating)].map((_, j) => (
-                    <span key={j} className="text-lg">★</span>
+                    <span key={j} className="text-sm">&#9733;</span>
                   ))}
                 </div>
-                <p className="text-[#1a1a1a] font-medium mb-6 text-base leading-relaxed">
+                <p className="text-[#1C1C1C] text-sm mb-5 leading-relaxed">
                   &quot;{review.quote}&quot;
                 </p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-[#1a1a1a]">{review.name}</p>
-                    <p className="text-[#1a1a1a]/50 text-sm">{review.location}</p>
-                  </div>
-                  {review.verified && (
-                    <span className="text-[10px] bg-[#7A9E7E]/20 text-[#5A7E5E] px-3 py-1.5 rounded-full font-bold">
-                      ✓ Verified
-                    </span>
-                  )}
+                <div>
+                  <p className="font-semibold text-[#1C1C1C] text-sm">{review.name}</p>
+                  <p className="text-[#1C1C1C]/40 text-xs">{review.location}</p>
                 </div>
-                <p className="text-[#334FB4] text-sm font-bold mt-4">{review.product}</p>
+                <p className="text-[#C4553A] text-xs font-semibold mt-3">{review.product}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Instagram / UGC Section */}
-      <section className="py-20 sm:py-28 px-4 sm:px-6 bg-[#FFF6E1]">
-        <div className="max-w-7xl mx-auto text-center">
-          <span className="inline-block px-5 py-2 bg-gradient-to-r from-[#334FB4] to-[#4A6BD4] text-white text-xs font-bold rounded-full mb-4 tracking-wide">
-            @HOTELBREAKFAST
-          </span>
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#1a1a1a] mb-6">
-            Join the <span className="gradient-text">Community</span>
-          </h2>
-          <p className="text-[#1a1a1a]/60 mb-12 max-w-xl mx-auto text-lg">
-            Tag us in your morning moments. We love seeing how you rock Hotel Breakfast.
-          </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-            {products.slice(0, 6).map((product, i) => (
-              <div
-                key={i}
-                className="aspect-square rounded-2xl sm:rounded-3xl overflow-hidden relative group cursor-pointer hover-scale animate-fade-in"
-                style={{ animationDelay: `${i * 0.1}s` }}
-                onClick={() => openQuickView(product)}
-              >
-                <Image
-                  src={product.image}
-                  alt={product.name}
-                  fill
-                  className="object-cover group-hover:scale-125 group-hover:rotate-6 transition-all duration-700"
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#334FB4]/80 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex items-center justify-center">
-                  <span className="text-white text-4xl transform scale-0 group-hover:scale-100 transition-transform duration-500">♥</span>
-                </div>
+      {/* Value Props */}
+      <section className="py-16 px-4 sm:px-6 bg-white border-y border-black/5">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-12 text-center">
+            {[
+              { title: "Sustainable", desc: "Organic & eco-friendly materials" },
+              { title: "Premium Quality", desc: "Built to last, made to impress" },
+              { title: "Free Shipping", desc: "On all orders over $75" },
+              { title: "Easy Returns", desc: "30-day money-back guarantee" },
+            ].map((item) => (
+              <div key={item.title}>
+                <h3 className="font-semibold text-[#1C1C1C] text-sm mb-1">{item.title}</h3>
+                <p className="text-[#1C1C1C]/40 text-xs">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -1360,49 +926,66 @@ export default function Home() {
       </section>
 
       {/* Footer */}
-      <footer className="py-16 sm:py-20 px-4 sm:px-6 bg-[#1a1a1a]">
-        <div className="max-w-7xl mx-auto">
+      <footer className="py-16 sm:py-20 px-4 sm:px-6 bg-[#1C1C1C]">
+        <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12 mb-16">
             <div className="col-span-2 md:col-span-1">
-              <div className="flex items-center gap-3 mb-6">
-                <div className="relative w-10 h-10">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="relative w-10 h-10 flex-shrink-0">
                   <Image
-                    src="/logo.png"
+                    src="/logo-icon.png"
                     alt="Hotel Breakfast"
                     fill
-                    className="object-contain brightness-0 invert"
+                    className="object-contain"
                   />
                 </div>
-                <span className="text-xl font-black tracking-tight text-white">HOTEL BREAKFAST</span>
+                <span className="text-sm font-bold tracking-tight text-white">HOTEL BREAKFAST</span>
               </div>
-              <p className="text-white/50 text-sm mb-6">
-                Because Champagne is a Morning Drink.™
+              <p className="text-white/40 text-xs mb-6 leading-relaxed">
+                Because Champagne is a Morning Drink.
               </p>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 {['instagram', 'tiktok', 'twitter'].map((social) => (
                   <a
                     key={social}
                     href="#"
-                    className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/50 hover:bg-[#334FB4] hover:text-white transition-all hover:scale-110"
+                    className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white/40 hover:bg-white/20 hover:text-white transition-all"
                   >
-                    {social === 'instagram' && <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/><circle cx="12" cy="12" r="3.5"/></svg>}
-                    {social === 'tiktok' && <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>}
-                    {social === 'twitter' && <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>}
+                    {social === 'instagram' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/><circle cx="12" cy="12" r="3.5"/></svg>}
+                    {social === 'tiktok' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>}
+                    {social === 'twitter' && <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>}
                   </a>
                 ))}
               </div>
             </div>
             {[
-              { title: 'Shop', links: ['All Products', 'Apparel', 'Accessories', 'Beach'] },
-              { title: 'Help', links: ['FAQ', 'Shipping', 'Returns', 'Contact Us', 'Size Guide'] },
-              { title: 'Company', links: ['Our Story', 'Sustainability', 'Press', 'Careers', 'Privacy'] },
+              { title: 'Shop', links: [
+                { label: 'All Products', href: '/#shop' },
+                { label: 'Apparel', href: '/#shop' },
+                { label: 'Accessories', href: '/#shop' },
+                { label: 'Beach', href: '/#shop' },
+              ]},
+              { title: 'Help', links: [
+                { label: 'FAQ', href: '/track#faq' },
+                { label: 'Shipping', href: '/track#faq' },
+                { label: 'Returns', href: '/track#faq' },
+                { label: 'Contact Us', href: 'mailto:hello@hotelbreakfast.co' },
+                { label: 'Size Guide', href: '/size-guide' },
+              ]},
+              { title: 'Company', links: [
+                { label: 'Our Story', href: '#story' },
+                { label: 'Blog', href: '/blog' },
+                { label: 'Track Order', href: '/track' },
+                { label: 'Sustainability', href: '#' },
+                { label: 'Privacy', href: '#' },
+              ]},
             ].map((col, i) => (
               <div key={i}>
-                <h4 className="font-bold mb-6 text-white">{col.title}</h4>
-                <ul className="space-y-3 text-white/50 text-sm">
+                <h4 className="font-semibold mb-5 text-white text-xs uppercase tracking-wider">{col.title}</h4>
+                <ul className="space-y-2.5 text-white/40 text-xs">
                   {col.links.map((link, j) => (
                     <li key={j}>
-                      <a href="#" className="hover:text-white hover:translate-x-1 inline-block transition-all">{link}</a>
+                      <Link href={link.href} className="hover:text-white transition-colors">{link.label}</Link>
                     </li>
                   ))}
                 </ul>
@@ -1410,19 +993,16 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between pt-10 border-t border-white/10 gap-6">
-            <p className="text-white/30 text-sm text-center sm:text-left">
-              © 2024 Hotel Breakfast. All rights reserved. Because Champagne is a Morning Drink.™
+          <div className="flex flex-col sm:flex-row items-center justify-between pt-8 border-t border-white/10 gap-4">
+            <p className="text-white/25 text-xs">
+              &copy; {new Date().getFullYear()} Hotel Breakfast. All rights reserved.
             </p>
-            <div className="flex items-center gap-4">
-              <span className="text-white/30 text-xs">We accept:</span>
-              <div className="flex gap-2">
-                {['Visa', 'MC', 'Amex', 'PayPal'].map((card) => (
-                  <span key={card} className="bg-white/10 text-white/60 px-3 py-1.5 rounded text-xs font-medium hover:bg-white/20 transition-colors cursor-default">
-                    {card}
-                  </span>
-                ))}
-              </div>
+            <div className="flex items-center gap-3">
+              {['Visa', 'MC', 'Amex', 'PayPal'].map((card) => (
+                <span key={card} className="bg-white/10 text-white/40 px-2.5 py-1 rounded text-[10px] font-medium">
+                  {card}
+                </span>
+              ))}
             </div>
           </div>
         </div>

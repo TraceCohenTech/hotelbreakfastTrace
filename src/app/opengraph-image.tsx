@@ -75,9 +75,9 @@ export default async function Image() {
             }}
           >
             <img
-              src="https://hotel-breakfast-redesign.vercel.app/logo.png"
-              width={56}
-              height={56}
+              src="https://hotel-breakfast-redesign.vercel.app/logo-white.png"
+              width={64}
+              height={64}
               style={{ objectFit: 'contain' }}
             />
             <div

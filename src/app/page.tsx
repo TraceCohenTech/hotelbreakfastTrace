@@ -15,7 +15,6 @@ const products = [
     description: "Cotton-rich fabric sweatshirt with vintage wash and retro vibe. Your new Sunday morning essential.",
     price: 76,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/3262399543692142814_2048.jpg",
-    image2: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/568868594357841610_2048.jpg",
     tag: "Bestseller",
     category: "Apparel",
     sizes: ["S", "M", "L", "XL"],
@@ -33,7 +32,6 @@ const products = [
     description: "Ring-spun cotton fabric unisex shirt with vintage aesthetic and pocket detail.",
     price: 42,
     image: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/1591691027165322782_2048.jpg",
-    image2: "https://cdn.shopify.com/s/files/1/0751/4456/0894/files/13733165656261452820_2048.jpg",
     tag: "Essential",
     category: "Apparel",
     sizes: ["XS", "S", "M", "L", "XL", "XXL"],
@@ -253,7 +251,6 @@ interface Product {
   description: string;
   price: number;
   image: string;
-  image2?: string;
   tag: string;
   category: string;
   sizes: string[];
@@ -877,18 +874,9 @@ export default function Home() {
                       src={product.image}
                       alt={product.name}
                       fill
-                      className="object-cover image-primary"
+                      className="object-cover product-image"
                       sizes="(max-width: 768px) 50vw, 25vw"
                     />
-                    {product.image2 && (
-                      <Image
-                        src={product.image2}
-                        alt={`${product.name} alternate`}
-                        fill
-                        className="object-cover image-secondary"
-                        sizes="(max-width: 768px) 50vw, 25vw"
-                      />
-                    )}
                     <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
                       <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
                         Quick View
@@ -1062,18 +1050,9 @@ export default function Home() {
                       src={product.image}
                       alt={product.name}
                       fill
-                      className="object-cover image-primary"
+                      className="object-cover product-image"
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     />
-                    {product.image2 && (
-                      <Image
-                        src={product.image2}
-                        alt={`${product.name} alternate`}
-                        fill
-                        className="object-cover image-secondary"
-                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      />
-                    )}
                     <div className="quick-view-overlay absolute inset-0 bg-[#1C1C1C]/20 flex items-center justify-center">
                       <span className="bg-white/95 backdrop-blur-sm text-[#1C1C1C] text-xs font-bold px-5 py-2.5 rounded-full shadow-lg">
                         Quick View

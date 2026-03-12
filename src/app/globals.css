@@ -332,23 +332,6 @@ body {
   transform-style: preserve-3d;
 }
 
-/* ===== PRODUCT IMAGE SWAP ===== */
-
-.product-card .image-primary {
-  transition: opacity 0.5s ease;
-  opacity: 1;
-}
-.product-card .image-secondary {
-  transition: opacity 0.5s ease;
-  opacity: 0;
-}
-.product-card:hover .image-primary {
-  opacity: 0;
-}
-.product-card:hover .image-secondary {
-  opacity: 1;
-}
-
 /* ===== WAVE DIVIDER ===== */
 
 .wave-divider {

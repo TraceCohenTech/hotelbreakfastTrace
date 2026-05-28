@@ -1,6 +1,13 @@
 import type { MetadataRoute } from 'next';
 import { products } from '@/lib/products';
 
+const blogSlugs = [
+  'the-art-of-the-hotel-morning',
+  'beach-towel-care-guide',
+  '5-ways-to-style-your-do-not-disturb-tee',
+  'why-champagne-is-actually-a-morning-drink',
+];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://hotelbreakfast.co';
 
@@ -9,6 +16,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: new Date(),
     changeFrequency: 'weekly',
     priority: 0.8,
+  }));
+
+  const blogPostUrls: MetadataRoute.Sitemap = blogSlugs.map((slug) => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.7,
   }));
 
   return [
@@ -30,6 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.6,
     },
+    ...blogPostUrls,
     {
       url: `${baseUrl}/track`,
       lastModified: new Date(),

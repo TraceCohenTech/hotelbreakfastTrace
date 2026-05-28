@@ -83,9 +83,30 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!post) {
     return { title: 'Post Not Found | Hotel Breakfast' };
   }
+  const title = `${post.title} | Hotel Breakfast Blog`;
+  const description = post.content[0].slice(0, 155) + '...';
+  const url = `https://hotelbreakfast.co/blog/${slug}`;
   return {
-    title: `${post.title} | Hotel Breakfast Blog`,
-    description: post.content[0].slice(0, 160) + '...',
+    title,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'Hotel Breakfast',
+      type: 'article',
+      locale: 'en_US',
+      publishedTime: post.date,
+      section: post.category,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      creator: '@hotelbreakfast',
+      site: '@hotelbreakfast',
+    },
   };
 }
 
@@ -97,7 +118,43 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
     notFound();
   }
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.content[0].slice(0, 155) + '...',
+    author: {
+      '@type': 'Organization',
+      name: 'Hotel Breakfast',
+      url: 'https://hotelbreakfast.co',
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Hotel Breakfast',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://hotelbreakfast.co/logo-white.png',
+      },
+    },
+    datePublished: post.date,
+    articleSection: post.category,
+    url: `https://hotelbreakfast.co/blog/${slug}`,
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://hotelbreakfast.co' },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://hotelbreakfast.co/blog' },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `https://hotelbreakfast.co/blog/${slug}` },
+    ],
+  };
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
     <div className="min-h-screen bg-[#FFFDF8]">
       {/* Header */}
       <header className="bg-white/95 backdrop-blur-sm border-b border-black/5">
@@ -186,5 +243,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         </div>
       </main>
     </div>
+    </>
   );
 }

@@ -17,10 +17,13 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hotel-breakfast-redesign.vercel.app"),
+  metadataBase: new URL("https://hotelbreakfast.co"),
   title: "Hotel Breakfast | Because Champagne is a Morning Drink",
   description: "Elevate your morning ritual. Luxury lifestyle essentials for those who believe every morning should feel like vacation. Premium quality. Effortless style.",
   keywords: ["luxury breakfast", "champagne", "morning ritual", "lifestyle", "hotel breakfast", "beach towels", "premium apparel"],
+  alternates: {
+    canonical: "https://hotelbreakfast.co",
+  },
   icons: {
     icon: [
       { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
@@ -34,7 +37,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "Hotel Breakfast",
     locale: "en_US",
-    url: "https://hotel-breakfast-redesign.vercel.app",
+    url: "https://hotelbreakfast.co",
   },
   twitter: {
     card: "summary_large_image",
@@ -50,7 +53,7 @@ const organizationJsonLd = {
   '@type': 'Organization',
   name: 'Hotel Breakfast',
   url: 'https://hotelbreakfast.co',
-  logo: 'https://hotel-breakfast-redesign.vercel.app/logo-white.png',
+  logo: 'https://hotelbreakfast.co/logo-white.png',
   sameAs: [
     'https://instagram.com/hotelbreakfast',
     'https://tiktok.com/@hotelbreakfast',
@@ -62,14 +65,6 @@ const websiteJsonLd = {
   '@type': 'WebSite',
   name: 'Hotel Breakfast',
   url: 'https://hotelbreakfast.co',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: 'https://hotelbreakfast.co/search?q={search_term_string}',
-    },
-    'query-input': 'required name=search_term_string',
-  },
 };
 
 export default function RootLayout({
